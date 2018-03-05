@@ -1,0 +1,8 @@
+data/
+*.DS_Store
+server/node_modules/
+*.swp
+.env
+npm-debug.log
+tests/node_modules/
+data/db/
