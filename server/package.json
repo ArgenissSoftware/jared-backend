@@ -1,0 +1,24 @@
+{
+  "name": "docker_web_app",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "preinstall": "npm config set package-lock false",
+    "start": "node app.js",
+    "startDev": "nodemon app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.13.3",
+    "mongoose": "^5.0.1",
+    "bcrypt": "^1.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "keywords": [],
+  "license": "ISC"
+}

@@ -1,0 +1,10 @@
+{
+	"name": "docker_jared_backend",
+	"version": "1.0.0",
+	"description": "Node.js, MongoDb on Docker",
+	"author": "Argeniss Software",
+	"scripts": {
+		"docker-up": "docker-compose up",
+		"docker-down": "docker-compose down"
+	}
+}
