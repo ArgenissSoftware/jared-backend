@@ -1,16 +1,15 @@
 FROM node:boron
 
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install app dependencies
 RUN npm install --global nodemon
 
 # For npm@5 or later, copy package-lock.json as well
-COPY package.json package-lock.json /usr/src/app/
+COPY package.json .
 RUN npm install
-COPY . /usr/src/app
+COPY . .
 
 # If you are building your code for production
 # RUN npm install --only=production
