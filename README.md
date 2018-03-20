@@ -33,14 +33,12 @@ Jared Back-End installation steps
 * To work with the automatic update of your changes, you must change the execution script in package.json, replace "node app.js" for "nodemon app.js"
 
 ### Git workflow: ###
-* Update your master branch before branching.
-* Before starting working on a new issue, the Developer creates a new branch following the conventions proposed by gitlab.
-* Click the “Create a branch” button and your remote branch should be available to checkout.
-* Make a checkout of the created branch: `$ git checkout {{created branch}}`
-* Commit your changes there.
-* After the code is complete, the Developer pushes the code to a remote branch: `$ git push origin {{created branch}}`
-* Creates a “Merge request” to be reviewed by a partner, clicking the "Create merge request" button. Assign the merge request to the person that should review the code.
-* Finally the Reviewer reviews the code and if it’s good, he or she merges the branch into master.
+1. Update to the latest version of master - `$ git checkout master && git pull`
+2. Create a new branch for working on the issue - `$ git checkout -b <branch-name>`
+3. Commit locally as you need - `$ git commit -m 'bla bla'`
+4. Update your branch against master - `$ git fetch origin && git rebase origin master`
+5. Push your branch to github - `$ git push origin <branch-name>`
+6. Create a Pull request and assign a reviewer
 
 Heroku deployment:
 * If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
