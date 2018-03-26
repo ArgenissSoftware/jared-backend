@@ -12,7 +12,6 @@ describe("Application registration requirement", function(){
     });
   });
 
-/// Comment
   describe("Registration is successful if", function(){
     it("All is valid", function(){
       assert(user.userIsValid());
