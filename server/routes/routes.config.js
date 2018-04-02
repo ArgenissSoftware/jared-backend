@@ -17,6 +17,7 @@ var doLogin = require('./login/login.route')
 
 // CLIENT
 var createNewClient = require('./client/createClient.route')
+var deleteClient = require('./client/deleteClient.route')
 
 // ROUTES
 // USER
@@ -31,7 +32,7 @@ router.get('/users', getAllUsers)
 
 //CLIENT
 router.post("/client", createNewClient)
-
+router.delete("/client", deleteClient)
 
 //LOGIN
 router.post("/login", doLogin)
