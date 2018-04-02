@@ -15,6 +15,9 @@ var getAllUsers = require('./users/getAllUsers.route')
 // LOGIN
 var doLogin = require('./login/login.route')
 
+// CLIENT
+var createNewClient = require('./client/createClient.route')
+
 // ROUTES
 // USER
 router.get("/user", getUserByEmail)
@@ -25,6 +28,9 @@ router.delete("/user", disableUser)
 
 //USERS
 router.get('/users', getAllUsers)
+
+//CLIENT
+router.post("/client", createNewClient)
 
 
 //LOGIN
