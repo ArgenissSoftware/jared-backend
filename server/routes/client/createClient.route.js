@@ -3,7 +3,7 @@ var ValidationData = require('../../helper/validationIncomingData');
 
 // CREATE CLIENT FUNCTION
 var createClient = function(req, res) {
-    var fieldToValidate = ["name", "employees"];
+    var fieldToValidate = ["name"];
     var errorMessage = ValidationData(fieldToValidate, req.body);
 
     if(errorMessage != "") {
@@ -22,9 +22,10 @@ var createClient = function(req, res) {
             return
         }
 
-        var newClient = new ClientModel({
+        var newClient = new clientModel({
           name: req.body.name,
-          employees: req.body.employees
+          employees: req.body.employees,
+          active: true
         });
 
         newClient.save(function (error, fluffy){

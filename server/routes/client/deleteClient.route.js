@@ -15,7 +15,7 @@ var deleteClient = function(req, res) {
         return
     }
 
-    clientModel.deleteOne({id : req.body.id}, (error, client) => {
+    clientModel.findByIdAndUpdate(req.body.id, { active: false }, (error, client) => {
         if (error) {
           res.status(500).json({
               status: 500,

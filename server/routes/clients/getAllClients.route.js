@@ -1,7 +1,7 @@
 var clientModel = require('../../models/client.model');
 
 var getAllClients = function(req, res) {
-    clientModel.find((error, client) => {
+    clientModel.find({ active: true }, (error, client) => {
         if (error) {
           res.status(500).json({
             status: 500,

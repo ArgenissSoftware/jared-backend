@@ -5,7 +5,8 @@ var clientModel = mongoose.Schema({
     employees: [{
         type: Number,
         ref: 'User'
-    }]
+    }],
+    active: Boolean
 });
 
 module.exports = mongoose.model( "ClientModel", clientModel );
