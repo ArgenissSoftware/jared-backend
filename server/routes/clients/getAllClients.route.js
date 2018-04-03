@@ -5,7 +5,7 @@ var getAllClients = function(req, res) {
         if (error) {
           res.status(500).json({
             status: 500,
-            errorMessage: "Failed to get all clients."
+            errorInfo: "Failed to get all clients.",
             data: {}
           }).end();
           return
@@ -13,7 +13,7 @@ var getAllClients = function(req, res) {
 
         res.status(200).json({
           status: 200,
-          errorMessage: "",
+          errorInfo: "",
           data: client ? client : {}
         }).end();
     })
