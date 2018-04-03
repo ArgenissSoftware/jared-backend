@@ -8,4 +8,4 @@ var clientModel = mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model( "Clientmodel", clientModel );
+module.exports = mongoose.model( "ClientModel", clientModel );
