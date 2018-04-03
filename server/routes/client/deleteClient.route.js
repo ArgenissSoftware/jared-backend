@@ -3,7 +3,7 @@ var ValidationData = require('../../helper/validationIncomingData');
 
 // DELETE CLIENT FUNCTION
 var deleteClient = function(req, res) {
-    var fieldToValidate = ["name"];
+    var fieldToValidate = ["id"];
     var errorMessage = ValidationData(fieldToValidate, req.body);
 
     if (errorMessage != "") {
