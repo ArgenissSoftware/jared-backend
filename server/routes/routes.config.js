@@ -15,13 +15,11 @@ var getAllUsers = require('./users/getAllUsers.route')
 // LOGIN
 var doLogin = require('./login/login.route')
 
-// CLIENT
-var createNewClient = require('./client/createClient.route')
-var deleteClient = require('./client/deleteClient.route')
-var getClientByName = require('./client/getClientByName.route')
-var updateClient = require('./client/updateClient.route')
-
 // CLIENTS
+var createNewClient = require('./clients/createClient.route')
+var deleteClient = require('./clients/deleteClient.route')
+var getClient = require('./clients/getClient.route')
+var updateClient = require('./clients/updateClient.route')
 var getAllClients = require('./clients/getAllClients.route')
 
 // ROUTES
@@ -35,13 +33,11 @@ router.delete("/user", disableUser)
 //USERS
 router.get('/users', getAllUsers)
 
-//CLIENT
-router.post("/client", createNewClient)
-router.delete("/client", deleteClient)
-router.get("/client", getClientByName)
-router.put("/client", updateClient)
-
 //CLIENTS
+router.post("/clients", createNewClient)
+router.delete("/clients/:id", deleteClient)
+router.get("/clients/:id", getClient)
+router.put("/clients/:id", updateClient)
 router.get("/clients", getAllClients)
 
 //LOGIN

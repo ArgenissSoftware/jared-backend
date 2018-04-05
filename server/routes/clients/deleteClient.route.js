@@ -4,7 +4,7 @@ var ValidationData = require('../../helper/validationIncomingData');
 // DELETE CLIENT FUNCTION
 var deleteClient = function(req, res) {
     var fieldToValidate = ["id"];
-    var errorMessage = ValidationData(fieldToValidate, req.body);
+    var errorMessage = ValidationData(fieldToValidate, req.params);
 
     if (errorMessage != "") {
         res.status(500).json({
@@ -15,7 +15,7 @@ var deleteClient = function(req, res) {
         return
     }
 
-    clientModel.findByIdAndUpdate(req.body.id, { active: false }, (error, client) => {
+    clientModel.findByIdAndUpdate(req.params.id, { active: false }, (error, client) => {
         if (error) {
           res.status(500).json({
               status: 500,

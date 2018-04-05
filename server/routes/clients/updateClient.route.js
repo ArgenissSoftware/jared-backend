@@ -4,7 +4,7 @@ var ValidationData = require('../../helper/validationIncomingData');
 // UPDATE CLIENT FUNCTION
 var updateClient = function(req, res) {
     var fieldToValidate = ["id"];
-    var errorMessage = ValidationData(fieldToValidate, req.body);
+    var errorMessage = ValidationData(fieldToValidate, req.params);
 
     if(errorMessage != "") {
         res.status(500).json({
@@ -23,7 +23,7 @@ var updateClient = function(req, res) {
         }
     }
 
-    clientModel.findByIdAndUpdate(req.body.id, clientNewData, (error, client) => {
+    clientModel.findByIdAndUpdate(req.params.id, clientNewData, (error, client) => {
         if(error){
           res.status(500).json({
               status: 500,

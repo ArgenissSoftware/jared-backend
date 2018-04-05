@@ -1,10 +1,10 @@
 var clientModel = require('../../models/client.model');
 var ValidationData = require('../../helper/validationIncomingData');
 
-// GET CLIENT BY NAME FUNCTION 
+// GET CLIENT BY NAME FUNCTION
 var getClientByName = function(req, res) {
-    var fieldToValidate = ["name"];
-    var errorMessage = ValidationData(fieldToValidate, req.body);
+    var fieldToValidate = ["id"];
+    var errorMessage = ValidationData(fieldToValidate, req.params);
 
     if (errorMessage != ""){
         res.status(500).json({
@@ -15,7 +15,7 @@ var getClientByName = function(req, res) {
         return
     }
 
-    clientModel.findOne({name: req.body.name}, (error, client) => {
+    clientModel.findById(req.params.id, (error, client) => {
         if (error){
           res.status(500).json({
             status: 500,
