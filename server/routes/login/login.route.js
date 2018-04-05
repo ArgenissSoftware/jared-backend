@@ -5,7 +5,7 @@ var PasswordHasher = require('../../helper/passwordHasher');
 var login = function(req, res){
     var fieldToValidate = ["email", "password"];
     var errorMessage = ValidationData(fieldToValidate, req.body);
-    
+
     if(errorMessage != "") {
         res.status(500).json({
             status: 500,
@@ -18,10 +18,10 @@ var login = function(req, res){
     // check if user exist
     var query = UserModel.findOne({ email: req.body.email }, (err, user) => {
         if (!user) {
-            errorHandler(res, "Failed to login. User no exist!")
+            errorHandler(res, "Failed to login. User doesn't exist!")
             return
         }
-       
+
         if(!user.active){
             errorHandler(res, "Failed to login. User disabled")
             return
