@@ -21,6 +21,7 @@ var deleteClient = require('./clients/deleteClient.route')
 var getClient = require('./clients/getClient.route')
 var updateClient = require('./clients/updateClient.route')
 var getAllClients = require('./clients/getAllClients.route')
+var getClientByName = require('./clients/getClientByName.route')
 
 // ROUTES
 // USER
@@ -39,6 +40,7 @@ router.delete("/clients/:id", deleteClient)
 router.get("/clients/:id", getClient)
 router.put("/clients/:id", updateClient)
 router.get("/clients", getAllClients)
+router.get("/client", getClientByName)
 
 //LOGIN
 router.post("/login", doLogin)
