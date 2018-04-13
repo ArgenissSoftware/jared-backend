@@ -50,7 +50,8 @@ Heroku deployment:
 * Now you can sign into Container Registry.
   `$ heroku container:login`
 * Deploy your Docker-based app. Build the Dockerfile in the current directory and push the Docker image to deploy the app.
-  `$ heroku container:push web`
+   1. Build the docker image: `$ cd server && docker build -t jared-backend .`
+   2. Push the image to heroku: `$ heroku container:push web -a jared-backend`
 
 Jared API Endpoints:
 * POST https://jared-backend.herokuapp.com/api/user
