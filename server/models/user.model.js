@@ -34,6 +34,9 @@ var userModel = mongoose.Schema({
     }]
 });
 
+userModel.index({username: 1}, {unique: true});
+userModel.index({email: 1}, {unique: true});
+
 userModel.method("usernameIsValid", function(){
   return this.username;
 });

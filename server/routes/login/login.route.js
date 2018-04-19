@@ -16,7 +16,11 @@ var login = function(req, res){
     }
 
     // check if user exist
-    var query = UserModel.findOne({ email: req.body.email }, (err, user) => {
+    var query = UserModel.find({$or: [{ email: req.body.email }, { username: req.body.email }]}, (err, result) => {
+        let user = null
+        if(result.length > 0){
+          user = result[0]
+        }
         if (!user) {
             errorHandler(res, "Failed to login. User doesn't exist!")
             return

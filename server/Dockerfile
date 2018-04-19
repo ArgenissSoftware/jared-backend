@@ -18,4 +18,4 @@ EXPOSE 3000
 CMD ["npm", "start"]
 
 # discomment this line to run server in dev mode to allow automatic refresh
-# CMD ["npm", "run", "startDev"]
+#CMD ["npm", "run", "startDev"]
