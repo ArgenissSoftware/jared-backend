@@ -28,6 +28,7 @@ Jared Back-End installation steps
 * sudo apt-get update
 * sudo apt-get install docker-ce
 * Test: sudo docker run hello-world
+* Go to jared backend folder and run “docker-compose build”
 * Go to jared backend folder and run “npm run docker-up”
 
 * To work with the automatic update of your changes, you must change the execution script in package.json, replace "node app.js" for "nodemon app.js"
