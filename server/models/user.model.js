@@ -30,8 +30,8 @@ var userModel = mongoose.Schema({
       default: 'hired'
     },
     clients: [{
-      type: Number,
-      ref: 'Client'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ClientModel'
     }]
 });
 
