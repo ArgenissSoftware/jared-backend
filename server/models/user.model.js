@@ -5,6 +5,7 @@ var userModel = mongoose.Schema({
     email: String,
     password: String,
     active: Boolean,
+    admin: Boolean,
     //employee data
     name: String,
     surname: String,
