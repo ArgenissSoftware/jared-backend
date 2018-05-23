@@ -19,10 +19,10 @@ var login = function(req, res){
     //check format email
     var errorEmailFormat = ValidationArgenissFormat(req.body.email);
 
-    if(errorEmailFormat != "") {
+    if(!errorEmailFormat) {
         res.status(400).json({
             status: 400,
-            errorInfo: errorEmailFormat,
+            errorInfo: "Failed to login. Email with invalid format",
             data: {}
         }).end();
         return

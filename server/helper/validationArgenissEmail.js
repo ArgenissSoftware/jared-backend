@@ -1,12 +1,8 @@
 function checkArgenissFormatEmail(email){
     var errorMessage = "";
-    const domain = "@argeniss.com";
+    const re =  /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(argeniss)\.com$/;
 
-    if(!email || email == "" || email.indexOf(domain) < 0){
-        errorMessage += `${email}: Email have a format incorrect.`;
-    }
-
-    return errorMessage;
+    return re.test(email);
 }
 
 module.exports = checkArgenissFormatEmail;
