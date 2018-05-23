@@ -1,6 +1,7 @@
 var UserModel = require('../../models/user.model');
 var ValidationData = require('../../helper/validationIncomingData');
 var PasswordHasher = require('../../helper/passwordHasher');
+var ValidationArgenissFormat = require('../../helper/validationArgenissEmail');
 
 var login = function(req, res){
     var fieldToValidate = ["email", "password"];
@@ -10,6 +11,18 @@ var login = function(req, res){
         res.status(500).json({
             status: 500,
             errorInfo: errorMessage,
+            data: {}
+        }).end();
+        return
+    }
+
+    //check format email
+    var errorEmailFormat = ValidationArgenissFormat(req.body.email);
+
+    if(errorEmailFormat != "") {
+        res.status(400).json({
+            status: 400,
+            errorInfo: errorEmailFormat,
             data: {}
         }).end();
         return
