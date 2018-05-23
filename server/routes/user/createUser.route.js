@@ -19,10 +19,10 @@ var createUser = function(req, res){
     //check format email
     var errorEmailFormat = ValidationArgenissFormat(req.body.email);
 
-    if(errorEmailFormat != "") {
+    if(!errorEmailFormat) {
         res.status(400).json({
             status: 400,
-            errorInfo: errorEmailFormat,
+            errorInfo: "Failed to create new user. Email with invalid format",
             data: {}
         }).end();
         return
