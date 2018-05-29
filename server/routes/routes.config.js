@@ -36,7 +36,7 @@ router.delete("/user", disableUser)
 //USERS
 router.get('/users', getAllUsers)
 router.get('/users/:id/clients', getUserClients)
-router.post('/users/:id/update_password', updateUserPassword)
+router.put('/users/:id/update_password', updateUserPassword)
 
 //CLIENTS
 router.post("/clients", createNewClient)
