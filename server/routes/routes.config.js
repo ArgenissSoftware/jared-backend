@@ -12,6 +12,7 @@ var disableUser = require('./user/disableUser.route')
 // USERS
 var getAllUsers = require('./users/getAllUsers.route')
 var getUserClients = require('./users/getUserClients.route')
+var updateUserPassword= require('./users/updateUserPassword.route')
 
 // LOGIN
 var doLogin = require('./login/login.route')
@@ -35,6 +36,7 @@ router.delete("/user", disableUser)
 //USERS
 router.get('/users', getAllUsers)
 router.get('/users/:id/clients', getUserClients)
+router.post('/users/:id/update_password', updateUserPassword)
 
 //CLIENTS
 router.post("/clients", createNewClient)
