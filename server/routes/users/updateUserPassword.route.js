@@ -35,8 +35,6 @@ var updateUserPasswordRoute = function (req, res){
             }).end();
             return
         }
-
-
         res.status(204).end();
 
     });
