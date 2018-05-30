@@ -36,13 +36,7 @@ var updateUserPasswordRoute = function (req, res){
             return
         }
 
-        res.status(200).json({
-            status: 200,
-            errorInfo: "",
-            data: {
-                message: "User's password updated!"
-            }
-        })
+        res.status(204)
 
     });
 
