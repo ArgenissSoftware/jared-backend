@@ -9,6 +9,7 @@ RUN npm install --global nodemon
 # For npm@5 or later, copy package-lock.json as well
 COPY package.json .
 RUN npm install
+RUN npm install nodemailer --save
 COPY . .
 
 # If you are building your code for production
