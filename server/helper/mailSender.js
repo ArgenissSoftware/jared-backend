@@ -21,30 +21,29 @@ function mailSender (receiversList, subject, text, html){
     }
 
     //get the rest of destinations if any
-    for (var i=1; i<receiversList.length; i++){
-        mailOptions.to= mailOptions.to + ", " + receiversList[i];
-    }
+    receiversList.slice(1).forEach(function (receiver){
+        mailOptions.to= mailOptions.to + ", " + receiver;
+    });
 
-    console.log('Enviando a: %s', mailOptions.to);
+    console.log('Sending email to: %s', mailOptions.to);
 
-    //set the rest of the mail options
+
     mailOptions.subject=subject;
     mailOptions.text=text;
     mailOptions.html=html;
-
-    //this field doesn't need to be the user used for authentication with the service
+    //this field doesn't need to be the user used for authentication
     mailOptions.from= user;
 
     console.log('Sending email from %s to %s', mailOptions.from, mailOptions.to);
 
-    // send mail with defined transport object
+
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
             return errorMessage= "There was an error while sending the email. Check console log";
         }
 
-        console.log('Message sent: %s', info.messageId);
+        console.log('Email sent: %s', info.messageId);
 
 
 
