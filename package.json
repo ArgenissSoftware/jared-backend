@@ -6,8 +6,5 @@
 	"scripts": {
 		"docker-up": "docker-compose up",
 		"docker-down": "docker-compose down"
-	},
-	"dependencies": {
-		"nodemailer": "^4.6.5"
 	}
 }
