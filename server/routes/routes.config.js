@@ -13,6 +13,8 @@ var disableUser = require('./user/disableUser.route')
 var getAllUsers = require('./users/getAllUsers.route')
 var getUserClients = require('./users/getUserClients.route')
 var updateUserPassword= require('./users/updateUserPassword.route')
+var forgotUserPassword= require('./users/forgotUserPassword.route')
+var resetUserPassword= require('./users/resetUserPassword.route')
 
 // LOGIN
 var doLogin = require('./login/login.route')
@@ -37,6 +39,8 @@ router.delete("/user", disableUser)
 router.get('/users', getAllUsers)
 router.get('/users/:id/clients', getUserClients)
 router.put('/users/:id/update_password', updateUserPassword)
+router.get('/users/forgot_password', forgotUserPassword)
+router.put('/users/reset_password', resetUserPassword)
 
 //CLIENTS
 router.post("/clients", createNewClient)

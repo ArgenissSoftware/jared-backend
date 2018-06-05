@@ -25,6 +25,9 @@ function mailSender (receiversList, subject, text, html){
         mailOptions.to= mailOptions.to + ", " + receiver;
     });
 
+    //in case user's name and surname are "undefined"
+    mailOptions.to= mailOptions.to.replace(/undefined/g,'');
+
     console.log('Sending email to: %s', mailOptions.to);
 
 
