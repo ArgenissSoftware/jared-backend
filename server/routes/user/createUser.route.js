@@ -49,15 +49,18 @@ var createUser = function(req, res){
                 errorHandler(res, "Failed to create new user.")
             }
 
-            res.status(200).json({
-                status: 200,
-                errorInfo: "",
-                data: {
-                    message: "User created!"
-                }
-            })
-        });
-    });
+  	    var token = PasswordHasher.generateToken(newUser);
+              res.status(200).json({
+                  status: 200,
+                  errorInfo: "",
+                  data: {
+                      message: "User created!",
+                      token: token,
+                      user: user
+                  }
+              })
+          });
+      });
 }
 
 function errorHandler(res, errorMessage) {

@@ -7,6 +7,8 @@ services:
       - "3000:3000"
     volumes:
       - ./server:/usr/src/app
+    environment:
+      - JWT_SECRET=4ImI1awVprbeUenPcYcmbyuDBV08Td6lgSDIhbMrLjo
     links:
       - mongo-service
     depends_on:

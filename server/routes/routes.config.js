@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+var jwt = require('express-jwt');
 
 // ROUTES FUNCTIONS
 // USER
@@ -8,6 +9,7 @@ var getUserByUsername = require('./user/getUserByUsername.route')
 var getUserByEmail = require('./user/getUserByEmail.route')
 var updateUser = require('./user/updateUser.route')
 var disableUser = require('./user/disableUser.route')
+var refreshToken = require('./user/refreshToken.route')
 
 // USERS
 var getAllUsers = require('./users/getAllUsers.route')
@@ -28,6 +30,7 @@ var getClientByName = require('./clients/getClientByName.route')
 // ROUTES
 // USER
 router.get("/user", getUserByEmail)
+router.get("/user/token", refreshToken)
 router.get("/user/:username", getUserByUsername)
 router.post("/user", createNewUser)
 router.put("/user", updateUser)
@@ -48,6 +51,5 @@ router.get("/client", getClientByName)
 
 //LOGIN
 router.post("/login", doLogin)
-
 
 module.exports = router
