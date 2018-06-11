@@ -5,13 +5,13 @@ var getUser = function(req, res){
     var fieldToValidate = ["username"];
     var errorMessage = ValidationData(fieldToValidate, req.params);
 
-    if(errorMessage != "") {
+    if(errorMessage !== "") {
         res.status(500).json({
             status: 500,
             errorInfo: errorMessage,
             data: {}
         }).end();
-        return
+        return;
     }
 
     UserModel.findOne({ username: req.params.username }, '-password', (err, user) =>{
@@ -21,17 +21,17 @@ var getUser = function(req, res){
                 errorInfo: errorMessage,
                 data: {}
             }).end();
-            return
+            return;
         }
 
         let response = {
             status: 200,
             errorInfo: "",
             data: user ? user : {}
-        }
+        };
 
         res.status(200).json(response).end();
     });
-}
+};
 
 module.exports = getUser;
