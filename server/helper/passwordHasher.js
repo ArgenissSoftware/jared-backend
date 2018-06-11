@@ -3,11 +3,11 @@ const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 function validatePassword(password, passwordHash) {
-    return bcrypt.compareSync(password, passwordHash)
+    return bcrypt.compareSync(password, passwordHash);
 }
 
 function hashPassword(passwordToHash){
-    return bcrypt.hashSync(passwordToHash, saltRounds)
+    return bcrypt.hashSync(passwordToHash, saltRounds);
 }
 
 function generateToken(user){
@@ -16,21 +16,11 @@ function generateToken(user){
     	email: user.email,
 	    admin: user.admin,
       _id: user._id.toString()
-    }
+    };
 
     return jwt.sign(u, process.env.JWT_SECRET, {
     	expiresIn: 60 * 60 * 24
     });
-}
-
-function getUserForToken(user) {
-  if(!user) return {};
-  return {
-    _id: user._id,
-    username: user.username,
-    email: user.email,
-    admin: user.admin
-  }
 }
 
 module.exports = {
@@ -38,4 +28,4 @@ module.exports = {
     hashPassword: hashPassword,
     generateToken: generateToken,
     getUserForToken: getUserForToken
-}
+};
