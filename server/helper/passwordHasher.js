@@ -26,6 +26,5 @@ function generateToken(user){
 module.exports = {
     validatePassword: validatePassword,
     hashPassword: hashPassword,
-    generateToken: generateToken,
-    getUserForToken: getUserForToken
+    generateToken: generateToken
 };
