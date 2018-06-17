@@ -10,11 +10,18 @@ var jwt = require('express-jwt');
 
 // App
 const server = express();
+
+// view engine setup
+server.engine('html', require('ejs').renderFile);
+server.set('view engine', 'html');
+server.set('view engine', 'ejs');
+
+
 server.use(cors({credentials: true, origin: true}))
 // Routes
 var routes = require('./routes/routes.config');
 
-server.set('view engine', 'html');
+
 server.set('port', (process.env.PORT || 3000));
 
 // format call body
@@ -43,6 +50,9 @@ server.get('/', (req, res) => {
 
 // import routes config with all other routes
 server.use("/api", routes);
+
+//expose templates and images as public
+server.use(express.static(__dirname + '/public'));
 
 server.listen(server.get('port'), function() {
   console.log('Server is running on port', server.get('port'));
