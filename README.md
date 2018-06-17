@@ -45,7 +45,7 @@ Jared Back-End installation steps
 5. Push your branch to github - `$ git push origin <branch-name>`
 6. Create a Pull request and assign a reviewer
 
-Heroku deployment:
+# Heroku deployment:
 * If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
   `$ heroku login`
 * Log in to Container Registry. You must have Docker set up locally to continue. You should see output when you run this command.
@@ -55,6 +55,9 @@ Heroku deployment:
 * Deploy your Docker-based app. Build the Dockerfile in the current directory and push the Docker image to deploy the app.
    1. Build the docker image: `$ cd server && docker build -t jared-backend .`
    2. Push the image to heroku: `$ heroku container:push web -a jared-backend`
+
+### API endpoint remote url:
+- [Jared Backend] (https://jared-backend.herokuapp.com)
 
 Jared API Endpoints:
 * POST https://jared-backend.herokuapp.com/api/user
