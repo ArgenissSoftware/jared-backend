@@ -16,7 +16,6 @@ var userModel = mongoose.Schema({
     phone: String,
     cellphone: String,
     birthday: Date,
-    email: String,
     skype: String,
     childrenCount: Number,
     career: String,
