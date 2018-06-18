@@ -2,12 +2,23 @@ var UserModel = require('../../models/user.model');
 var ValidationData = require('../../helper/validationIncomingData');
 var PasswordHasher = require('../../helper/passwordHasher');
 
-var updateUserPasswordRoute = function (req, res){
+var updateUserPassword = function (req, res){
 
     var fieldToValidate = ["id"];
-    var errorMessage = ValidationData(fieldToValidate, req.params);
+    var errorMessage = "";
+    var userId="";
 
-    //check passwords are equall
+
+    if (req.body.hasOwnProperty('id')){
+        errorMessage=ValidationData(fieldToValidate, req.body);
+        userId =req.body.id;
+    }
+    else{
+        errorMessage=ValidationData(fieldToValidate, req.params);
+        userId=req.params.id;
+    }
+
+    //check passwords are equal
     if (req.body.password !== req.body.password_confirmation){
         errorMessage+= "Passwords doesn't match";
     }
@@ -22,11 +33,11 @@ var updateUserPasswordRoute = function (req, res){
     }
 
     //create auxiliar user
-    var userNewData = {'password':""};
+    var userNewData = {'password':`${req.body.password}` };
     userNewData.password= PasswordHasher.hashPassword(req.body.password);
 
     //update
-    UserModel.findByIdAndUpdate(req.params.id, userNewData, (error, user) => {
+    UserModel.findByIdAndUpdate(userId, userNewData, (error, user) => {
         if(error){
             res.status(500).json({
                 status: 500,
@@ -40,6 +51,7 @@ var updateUserPasswordRoute = function (req, res){
 
     });
 
+
 }
 
-module.exports = updateUserPasswordRoute;
+module.exports=updateUserPassword;

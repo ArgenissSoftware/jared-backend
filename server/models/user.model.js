@@ -16,7 +16,6 @@ var userModel = mongoose.Schema({
     phone: String,
     cellphone: String,
     birthday: Date,
-    email: String,
     skype: String,
     childrenCount: Number,
     career: String,
@@ -24,6 +23,8 @@ var userModel = mongoose.Schema({
     startWorkDate: Date,
     alarmCode: String,
     githubID: String,
+    reset_password_token: String,
+    reset_password_expires: Date,
     relation: {
       type: String,
       enum: ['freelance', 'hired'],
