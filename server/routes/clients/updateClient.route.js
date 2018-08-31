@@ -1,5 +1,6 @@
 var clientModel = require('../../models/client.model');
 var ValidationData = require('../../helper/validationIncomingData');
+var SchemaValidator = require('../../helper/schemaValidator');
 
 // UPDATE CLIENT FUNCTION
 var updateClient = function(req, res) {
@@ -10,6 +11,16 @@ var updateClient = function(req, res) {
         res.status(500).json({
             status: 500,
             errorInfo: errorMessage,
+            data: {}
+        }).end();
+        return
+    }
+
+    var validation = SchemaValidator.clientValidation(req.body);
+    if(validation.error) {
+        res.status(500).json({
+            status: 500,
+            errorInfo: validation.error,
             data: {}
         }).end();
         return

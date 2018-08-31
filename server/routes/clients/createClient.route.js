@@ -1,15 +1,14 @@
 var clientModel = require('../../models/client.model');
-var ValidationData = require('../../helper/validationIncomingData');
+var SchemaValidator = require('../../helper/schemaValidator');
 
 // CREATE CLIENT FUNCTION
 var createClient = function(req, res) {
-    var fieldToValidate = ["name"];
-    var errorMessage = ValidationData(fieldToValidate, req.body);
-
-    if(errorMessage != "") {
+    
+    var validation = SchemaValidator.clientValidation(req.body);
+    if(validation.error) {
         res.status(500).json({
             status: 500,
-            errorInfo: errorMessage,
+            errorInfo: validation.error,
             data: {}
         }).end();
         return
