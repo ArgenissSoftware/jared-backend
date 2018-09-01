@@ -27,7 +27,8 @@ const userSchema = Joi.object().keys({
     startWorkDate: Joi.date().max('now'),
     alarmCode: Joi.string().min(3).max(50),
     githubID: Joi.string().min(3).max(50),
-    relation: Joi.any().valid(['freelance', 'hired'])
+    relation: Joi.any().valid(['freelance', 'hired']),
+    clients: Joi.array().unique((a,b)=>a.id===b.id)
 });
 
 const clientSchema = Joi.object().keys({
@@ -37,7 +38,8 @@ const clientSchema = Joi.object().keys({
     email: commonEmail,
     address: Joi.string().min(3).max(50),
     url: url,
-    active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false')
+    active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
+    employees: Joi.array().unique((a,b)=>a.id===b.id)
 });
 
 
