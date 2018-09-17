@@ -1,11 +1,10 @@
 var UserModel = require('../../models/user.model');
 var ValidationData = require('../../helper/validationIncomingData');
-var PasswordHasher = require('../../helper/passwordHasher');
+var SchemaValidator = require('../../helper/schemaValidator');
 
 var updateUser = function(req, res){
     var fieldToValidate = ["id"];
     var errorMessage = ValidationData(fieldToValidate, req.body);
-
     if(errorMessage !== "") {
         res.status(500).json({
             status: 500,
@@ -14,6 +13,16 @@ var updateUser = function(req, res){
         }).end();
         return;
     }
+
+   var validation = SchemaValidator.userValidation(req.body);
+   if(validation.error) {
+    res.status(500).json({
+        status: 500,
+        errorInfo: validation.error,
+        data: {}
+    }).end();
+    return;
+} 
 
     var userNewData = {};
 
