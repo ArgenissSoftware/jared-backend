@@ -5,4 +5,3 @@ server/node_modules/
 .env
 npm-debug.log
 tests/node_modules/
-data/db/

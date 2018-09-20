@@ -7,9 +7,9 @@ const DATABASE_CONECTION = `${config.jaredDB.host}`;
 exports.initializeMongo = function () {
 
     var uristring = process.env.MONGODB_URI || DATABASE_CONECTION
-    mongoose.connect(DATABASE_CONECTION);
 
-    console.log("Connecting to mongodb....");
+    console.log("Connecting to mongodb...." + DATABASE_CONECTION);
+    mongoose.connect(DATABASE_CONECTION);
 
     mongoose.set('bufferCommands', false);
 

@@ -1,6 +1,7 @@
-var express = require('express')
-var router = express.Router()
-var jwt = require('express-jwt');
+var express = require('express');
+var router = express.Router();
+
+const UsersController = require('../controllers/users.controller');
 
 // ROUTES FUNCTIONS
 // USER
@@ -38,12 +39,14 @@ router.post("/user", createNewUser)
 router.put("/user", updateUser)
 router.delete("/user", disableUser)
 
+new UsersController('/users', router);
+
 //USERS
-router.get('/users', getAllUsers)
-router.get('/users/:id/clients', getUserClients)
-router.put('/users/:id/update_password', updateUserPassword)
-router.get('/users/forgot_password', forgotUserPassword)
-router.put('/users/reset_password', resetUserPassword)
+// router.get('/users', getAllUsers)
+// router.get('/users/:id/clients', getUserClients)
+// router.put('/users/:id/update_password', updateUserPassword)
+// router.post('/users/forgot_password', forgotUserPassword)
+// router.get('/users/reset_password', resetUserPassword)
 
 //CLIENTS
 router.post("/clients", createNewClient)

@@ -54,7 +54,6 @@ var login = function(req, res){
       	var token = PasswordHasher.generateToken(user);
         res.status(200).json({
             status: 200,
-            errorInfo: "",
             data: {
                 message: "Login correct!",
                 token: token,

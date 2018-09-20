@@ -6,12 +6,10 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Install app dependencies
-RUN yarn --prod && yarn cache clean
+RUN yarn && yarn global add nodemon && yarn cache clean
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.3.0/wait /wait
 RUN chmod +x /wait
 
 EXPOSE 3000
-CMD /wait && yarn start
-
-
+CMD /wait && yarn startDev

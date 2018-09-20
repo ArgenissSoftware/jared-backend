@@ -1,24 +1,31 @@
-version: '3'
+version: '3.3'
 services:
   server:
     image: jared-backend
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./server:/usr/src/app
     environment:
       - JWT_SECRET=4ImI1awVprbeUenPcYcmbyuDBV08Td6lgSDIhbMrLjo
-    links:
-      - mongo-service
+      - WAIT_HOSTS=mongo:27017
+    networks:
+      - backend
     depends_on:
-      - mongo-service
-  mongo-service:
+      - mongo
+  mongo:
     image: "mongo"
-    container_name: "mongo-service"
+    container_name: "mongo"
     environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
-    ports:
-      - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+    networks:
+      - backend
+    volumes:
+      - ./data:/data/db
+    command: mongod --smallfiles --logpath=/dev/null --dbpath=/data/db # --quiet
+
+networks:
+  backend:
+    driver: "bridge"

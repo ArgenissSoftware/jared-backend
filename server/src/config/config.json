@@ -5,7 +5,7 @@
             "password": "jared",
             "database": "jaredDB",
             "port": "27017",
-            "host"    : "mongodb://mongo-service/jaredDB"
+            "host"    : "mongodb://mongo/jaredDB"
         },
         "listenHost": "0.0.0.0",
         "listenPort": "3000"

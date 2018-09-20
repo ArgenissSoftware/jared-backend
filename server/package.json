@@ -1,13 +1,13 @@
 {
-  "name": "docker_web_app",
-  "version": "1.0.0",
-  "description": "Node.js on Docker",
-  "author": "First Last <first.last@example.com>",
-  "main": "server.js",
+  "name": "jared-backend",
+  "version": "0.1.1",
+  "description": "Jared ERP backend",
+  "author": "Argeniss Software",
+  "main": "arc/app.js",
   "scripts": {
     "preinstall": "npm config set package-lock false",
-    "start": "node app.js",
-    "startDev": "nodemon app.js"
+    "start": "node src/app.js",
+    "startDev": "nodemon src/app.js"
   },
   "dependencies": {
     "bcrypt": "^2.0.0",

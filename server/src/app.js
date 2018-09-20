@@ -36,16 +36,18 @@ if (!process.env.JWT_SECRET) {
   process.exit();
 }
 
-server.use(jwt({ secret: process.env.JWT_SECRET}).unless({
-  path: [
-    { url: '/', methods: ['GET']},
-    { url: '/api/login', methods: ['POST']},
-    { url: '/api/user', methods: ['POST']}
-  ]
-}));
+// server.use(jwt({ secret: process.env.JWT_SECRET}).unless({
+//   path: [
+//     { url: '/', methods: ['GET']},
+//     { url: '/api/login', methods: ['POST']},
+//     { url: '/api/user', methods: ['POST']},
+//     { url: '/api/users/forgot_password', methods: ['POST']},
+//     { url: '/api/users/reset_password', methods: ['GET']}
+//   ]
+// }));
 // TODO: test url then we will remove it
 server.get('/', (req, res) => {
-  res.send('Hello! Server is working!\n');
+  res.send('Ping!\n');
 });
 
 // import routes config with all other routes
