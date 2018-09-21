@@ -1,6 +1,7 @@
 const express = require('express');
 const CrudRestController = require('./crud-rest.controller');
 const UserModel = require('../models/user.model');
+const PasswordHasher = require('../helper/passwordHasher');
 
 /**
  * Base Controller
@@ -38,7 +39,46 @@ class UsersController extends CrudRestController {
    * Create resource
    */
   create(req, res) {
+    var validation = UserModel.validateUpdate(req.body);
+    if (validation.error) {
+      // validation error
+      this._error(res, validation.error.details, 422);
+      return;
+    }
 
+    // check if user exist
+    UserModel.find({ $or : [ { email: req.body.email }, { username: req.body.username } ] }, (err, user) => {
+      if (user.length > 0) {
+        this._error(res, "User already exist!")
+        return
+      }
+
+      var hashPassword = PasswordHasher.hashPassword(req.body.password);
+
+      var newUser = new UserModel({
+        email: req.body.email,
+        username: req.body.username,
+        password: hashPassword,
+        active: true
+      });
+
+      newUser.save((error, fluffy) => {
+        if(error){
+          this._error(res, "Failed to create new user.")
+        }
+
+        const token = PasswordHasher.generateToken(newUser);
+        res.status(200).json({
+            status: 200,
+            errorInfo: "",
+            data: {
+                message: "User created!",
+                token: token,
+                user: user
+            }
+        });
+      });
+    });
   }
 
   /**

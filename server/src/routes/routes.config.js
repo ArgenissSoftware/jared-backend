@@ -32,12 +32,12 @@ var getClientByName = require('./clients/getClientByName.route')
 
 // ROUTES
 // USER
-router.get("/user", getUserByEmail)
-router.get("/user/token", refreshToken)
-router.get("/user/:username", getUserByUsername)
-router.post("/user", createNewUser)
-router.put("/user", updateUser)
-router.delete("/user", disableUser)
+// router.get("/user", getUserByEmail)
+// router.get("/user/token", refreshToken)
+// router.get("/user/:username", getUserByUsername)
+// router.post("/user", createNewUser)
+// router.put("/user", updateUser)
+// router.delete("/user", disableUser)
 
 new UsersController('/users', router);
 
