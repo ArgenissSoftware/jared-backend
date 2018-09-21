@@ -106,6 +106,7 @@ class UsersController extends CrudRestController {
     const id = req.body._id;
     delete req.body._id;
     delete req.body.__v;
+    delete req.body.password;
 
     var validation = UserModel.validateUpdate(req.body);
     if (validation.error) {
