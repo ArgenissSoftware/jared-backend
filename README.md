@@ -5,35 +5,10 @@ Jared is an ERP system for handling employees, customers other ERP features rela
 Jared Back-End installation steps
 
 ### How to install: ###
-* [Install NodeJS (If not already installed)](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-* Clone the Jared Back-End git repository
-* $ npm install
-* `sudo apt-get update`
-* Set up docker repository:
-
-    `sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common`
-
-* Add Docker’s official GPG key:
-     `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
-
-* Install Docker:
-
-    `sudo add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) \
-    stable"`
-
-* sudo apt-get update
-* sudo apt-get install docker-ce
-* Test: sudo docker run hello-world
-* Go to jared backend folder and run “docker-compose build”
-* Go to jared backend folder and run “npm run docker-up”
-
-* To work with the automatic update of your changes, you must change the execution script in package.json, replace "node app.js" for "nodemon app.js"
+* [Install Docker (If not already installed)](https://www.docker.com/get-started)
+* Clone the Jared Back-End git repository (fork the repository first if you want to contribute)
+* Build and run the docker containers: 
+  `docker-compose up -d`
 
 # Git workflow #
 1. Update to the latest version of master - `$ git checkout master && git pull`
