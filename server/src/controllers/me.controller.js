@@ -1,4 +1,3 @@
-const express = require('express');
 const BaseRestController = require('./base-rest.controller');
 const ValidationData = require('../helper/validationIncomingData');
 const UserModel = require('../models/user.model');

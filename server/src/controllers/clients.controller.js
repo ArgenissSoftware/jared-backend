@@ -1,4 +1,3 @@
-const express = require('express');
 const CrudRestController = require('./crud-rest.controller');
 const ClientModel = require('../models/client.model');
 const ValidationData = require('../helper/validationIncomingData');

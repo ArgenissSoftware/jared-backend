@@ -1,4 +1,3 @@
-const express = require('express');
 const BaseRestController = require('./base-rest.controller');
 const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
 const ValidationData = require('../helper/validationIncomingData');
