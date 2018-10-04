@@ -2,14 +2,17 @@ const express = require('express');
 const BaseRestController = require('./base-rest.controller');
 const ValidationData = require('../helper/validationIncomingData');
 const UserModel = require('../models/user.model');
+const MailSender= require("../helper/mailSender");
+const crypto = require('crypto');
+const PasswordHasher = require('../helper/passwordHasher');
 
 class MeController extends BaseRestController {
 
 
   registerRoutes(req, res) {
     this.router.put('/:id/update_password', this.updatePassword.bind(this))
-    this.router.post('/forgot_password', this.forgotPassword.bind(this))
-    this.router.get('/reset_password', this.resetPassword.bind(this))
+    this.router.get('/forgot_password', this.forgotPassword.bind(this))
+    this.router.put('/reset_password', this.resetPassword.bind(this))
   }
 
 
@@ -143,9 +146,6 @@ class MeController extends BaseRestController {
     })
   }
 
+  }
 
-
-
-
-
-}
+  module.exports = MeController;

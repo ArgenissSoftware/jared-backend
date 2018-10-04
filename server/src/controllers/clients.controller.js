@@ -119,6 +119,9 @@ class ClientsController extends CrudRestController {
 
     var fieldToValidate = ["id"];
     var errorMessage = ValidationData(fieldToValidate, req.params);
+    const id = req.body._id;
+    delete req.body._id;
+    delete req.body.__v;
 
     if (errorMessage != "") {
       res.status(500).json({
@@ -136,15 +139,9 @@ class ClientsController extends CrudRestController {
       return;
     }
 
-    var clientNewData = {}
+    
 
-    for (field in req.body) {
-      if (field != 'id') {
-        clientNewData[field] = req.body[field]
-      }
-    }
-
-    ClientModel.findByIdAndUpdate(req.params.id, clientNewData, (error, client) => {
+    ClientModel.findByIdAndUpdate(id, req.body, (error, client) => {
       if (error) {
         res.status(500).json({
           status: 500,

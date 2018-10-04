@@ -3,6 +3,8 @@ const BaseRestController = require('./base-rest.controller');
 const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
 const ValidationData = require('../helper/validationIncomingData');
 const UserModel = require('../models/user.model');
+const PasswordHasher = require('../helper/passwordHasher');
+const jwt = require('jsonwebtoken');
 
 
 class AuthController  extends BaseRestController  {
@@ -10,7 +12,7 @@ class AuthController  extends BaseRestController  {
 
   registerRoutes() {
     this.router.post("/login", this.login.bind(this));
-    this.router.get("/token", this.refreshToken.bind(this));
+    this.router.get("/refreshToken", this.refreshToken.bind(this));
   }
 
 
@@ -76,7 +78,7 @@ class AuthController  extends BaseRestController  {
   };
 
 
-  refreshToken = function(req, res) {
+  refreshToken(req, res) {
     var token = req.body.token || req.query.token || req.headers.authorization;
     if (!token) {
       return res.status(401).json({message: 'Invalid Token'});
@@ -111,3 +113,5 @@ class AuthController  extends BaseRestController  {
   };
 
 }
+
+module.exports = AuthController;

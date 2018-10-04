@@ -2,6 +2,7 @@ const express = require('express');
 const CrudRestController = require('./crud-rest.controller');
 const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
+const ValidationData = require('../helper/validationIncomingData');
 
 /**
  * Base Controller
@@ -16,7 +17,7 @@ class UsersController extends CrudRestController {
     this.router.get('/:id/clients', this.getClients.bind(this));
     this.router.get("/username/:username", this.getByname.bind(this));
     this.router.get("/email/:email", this.getByEmail.bind(this));
-    this.router.get("/disable/:id", this.disable.bind(this));
+    this.router.put("/disable/:id", this.disable.bind(this));
 
   }
 
