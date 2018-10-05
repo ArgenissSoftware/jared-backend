@@ -5,8 +5,8 @@ const ValidationData = require('../helper/validationIncomingData');
 class ClientsController extends CrudRestController {
 
   registerRoutes() {
+    this.router.get("/byName", this.getByName.bind(this));
     super.registerRoutes();
-    this.router.get('/byName/:name', this.getByName.bind(this));
   }
 
   /**
@@ -203,7 +203,7 @@ class ClientsController extends CrudRestController {
 
   getByName(req, res){
     
-      var fieldToValidate = ["name"];
+    var fieldToValidate = ["name"];
     var errorMessage = ValidationData(fieldToValidate, req.query);
 
     if (errorMessage != ""){
@@ -215,7 +215,7 @@ class ClientsController extends CrudRestController {
         return
     }
 
-    clientModel.find({ name: req.query.name }, (error, client) => {
+    ClientModel.find({ name: req.query.name }, (error, client) => {
         if (error){
           res.status(500).json({
             status: 500,
