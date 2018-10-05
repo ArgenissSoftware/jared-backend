@@ -32,7 +32,7 @@ Jared Back-End installation steps
    2. Push the image to heroku: `$ heroku container:push web -a jared-backend`
 
 
-### new API endpoints Postman documentation:
+### New API endpoints documentation:
 
 https://documenter.getpostman.com/view/5206471/RWgnWzdE
 
