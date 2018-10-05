@@ -31,11 +31,17 @@ Jared Back-End installation steps
    1. Build the docker image: `$ cd server && docker build -t jared-backend .`
    2. Push the image to heroku: `$ heroku container:push web -a jared-backend`
 
+
+### New API endpoints documentation:
+
+https://documenter.getpostman.com/view/5206471/RWgnWzdE
+
 ### API endpoint remote url:
+
 - [Jared Backend] (https://jared-backend.herokuapp.com)
 
 Jared API Endpoints:
-* POST https://jared-backend.herokuapp.com/api/user
+* POST https://jared-backend.herokuapp.com/api/users
   Request:
   ```javascript
   {
@@ -54,7 +60,7 @@ Jared API Endpoints:
     }
   }
   ```
-  * POST https://jared-backend.herokuapp.com/api/login
+  * POST https://jared-backend.herokuapp.com/auth/login
     Request:
     ```javascript
     {
@@ -72,7 +78,7 @@ Jared API Endpoints:
       }
     }
     ```
-* GET https://jared-backend.herokuapp.com/api/user?email=cuti@mail.com
+* GET https://jared-backend.herokuapp.com/api/users/email/cuti@mail.com
   ```javascript
     {
         "status": 200,
@@ -90,7 +96,7 @@ Jared API Endpoints:
         ]
     }
   ```
-* GET https://jared-backend.herokuapp.com/api/user/cuti
+* GET https://jared-backend.herokuapp.com/api/users/username/cuti
     ```javascript
     {
   "status": 200,
@@ -133,7 +139,7 @@ Jared API Endpoints:
     ]
 }
         ```
-* DELETE https://jared-backend.herokuapp.com/api/user
+* DELETE https://jared-backend.herokuapp.com/api/users/disable/5a8436b7a1af260010767191
 ```javascript
 req =  {
 	"id": "5a8436b7a1af260010767191",
@@ -147,7 +153,7 @@ req =  {
     }
 }
 ```
-* PUT https://jared-backend.herokuapp.com/api/user
+* PUT https://jared-backend.herokuapp.com/api/users/5a8436b7a1af260010767191
 ```javascript
 req =  {
 	"id": "5a8436b7a1af260010767191",
