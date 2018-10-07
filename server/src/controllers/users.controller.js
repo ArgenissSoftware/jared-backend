@@ -12,30 +12,19 @@ class UsersController extends CrudRestController {
    * Register controller routes
    */
   registerRoutes() {
-    super.registerRoutes();
     this.router.get('/:id/clients', this.getClients.bind(this));
-    this.router.get("/username/:username", this.getByname.bind(this));
+    this.router.get("/username/:username", this.getByUsername.bind(this));
     this.router.get("/email/:email", this.getByEmail.bind(this));
     this.router.put("/disable/:id", this.disable.bind(this));
-
+    super.registerRoutes();
   }
 
   /**
    * List resources
    */
   list(req, res) {
-    UserModel.find({ active: true }, '-password', (err, user) => {
-      if (err) {
-        this._error(res, err.message, 500);
-        return
-      }
-
-      let response = {
-        status: 200,
-        data: user ? user : {}
-      }
-
-      res.status(200).json(response).end();
+    UserModel.find({ active: true }, '-password', (err, data) => {
+      this._sendResponse(res, err, data)
     });
   }
 
@@ -89,17 +78,8 @@ class UsersController extends CrudRestController {
    * Get resource
    */
   get(req, res) {
-    UserModel.findById(req.params.id, (error, client) => {
-      if (error) {
-        this._error(res, err.message, 500);
-        return
-      }
-
-      res.status(200).json({
-        status: 200,
-        errorInfo: "",
-        data: client ? client : {}
-      }).end();
+    UserModel.findById(req.params.id, (err, data) => {
+      this._sendResponse(res, err, data);
     });
   }
 
@@ -119,18 +99,14 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    UserModel.findByIdAndUpdate(id, req.body, (error, user) => {
-      if (error) {
+    UserModel.findByIdAndUpdate(id, req.body, (err, data) => {
+
+      if (err) {
         this._error(res, 'Failed to update user.');
         return;
       }
-
-      res.status(200).json({
-        status: 200,
-        data: {
-          message: 'User updated!'
-        }
-      });
+      var data = { message: 'User updated!' };
+      this._success(res, data);
     });
   }
 
@@ -147,22 +123,9 @@ class UsersController extends CrudRestController {
    * @param {response} res
    */
   getClients(req, res) {
-    if (!req.params.id) {
-      this._error(res, 'id is required', 500);
-      return
-    }
 
-    UserModel.findById(req.params.id, 'clients', (err, clients) => {
-      if (err) {
-        this._error(res, err.message);
-        return
-      }
-
-      let response = {
-        status: 200,
-        data: clients ? clients.clients : {}
-      }
-      res.status(200).json(response).end();
+    UserModel.findById(req.params.id, 'clients', (err, data) => {
+      this._sendResponse(res, err, data);
     }).populate('clients');
   }
 
@@ -171,85 +134,49 @@ class UsersController extends CrudRestController {
     var errorMessage = ValidationData(fieldToValidate, req.params);
 
     if (errorMessage != "") {
-      res.status(500).json({
-        status: 500,
-        errorInfo: errorMessage,
-        data: {}
-      }).end();
-      return
-    }
-
-    UserModel.find({ email: req.params.email }, '-password', (err, user) => {
-      let response = {
-        status: 200,
-        errorInfo: "",
-        data: user ? user : {}
-      }
-
-      res.status(200).json(response).end();
-    });
-  }
-
-  getByname(req, res) {
-    var fieldToValidate = ["username"];
-    var errorMessage = ValidationData(fieldToValidate, req.params);
-
-    if (errorMessage !== "") {
-      res.status(500).json({
-        status: 500,
-        errorInfo: errorMessage,
-        data: {}
-      }).end();
+      this._error(res, errorMessage);
       return;
     }
 
-    UserModel.findOne({ username: req.params.username }, '-password', (err, user) => {
+    UserModel.find({ email: req.params.email }, '-password', (err, data) => {
+      this._success(res, data);
+    });
+  }
+
+  getByUsername(req, res) {
+    var fieldToValidate = ["username"];
+    var errorMessage = ValidationData(fieldToValidate, req.params);
+    if (errorMessage !== "") {
+      this._error(res, errorMessage);
+      return;
+    }
+
+    UserModel.findOne({ username: req.params.username }, '-password', (err, data) => {
       if (err) {
-        res.status(500).json({
-          status: 500,
-          errorInfo: errorMessage,
-          data: {}
-        }).end();
+        this._error(res, errorMessage, 500);
         return;
       }
-
-      let response = {
-        status: 200,
-        errorInfo: "",
-        data: user ? user : {}
-      };
-
-      res.status(200).json(response).end();
+      this._success(res, data);
     });
 
   }
 
   disable(req, res) {
     var fieldToValidate = ["id"];
-    var errorMessage = ValidationData(fieldToValidate, req.body);
+    var errorMessage = ValidationData(fieldToValidate, req.params);
 
     if (errorMessage != "") {
-      res.status(500).json({
-        status: 500,
-        errorInfo: errorMessage,
-        data: {}
-      }).end();
-      return
+      this._error(res, errorMessage);
+      return;
     }
 
-    UserModel.findByIdAndUpdate(req.body.id, { active: false }, (error, user) => {
-      if (error) {
+    UserModel.findByIdAndUpdate(req.params.id, { active: false }, (err, data) => {
+      if (err) {
         this._error(res, "Failed to delete user.")
         return
       }
-
-      res.status(200).json({
-        status: 200,
-        errorInfo: "",
-        data: {
-          message: "User disabled!"
-        }
-      })
+      data = {message: "User disabled!"};
+      this._success(res,data);
     })
   }
 }
