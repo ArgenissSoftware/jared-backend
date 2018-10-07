@@ -63,10 +63,6 @@ class ClientsController extends CrudRestController {
    */
   get(req, res) {
 
-    if (this._validateRequest(res, ["id"], req.params)) {
-      return;
-    }
-
     ClientModel.findById(req.params.id, (err, data) => {
       this._sendResponse(res, err, data);
     })
@@ -77,12 +73,7 @@ class ClientsController extends CrudRestController {
    */
   update(req, res) {
 
-
-    if (this._validateRequest(res, ["id"], req.params)) {
-      return;
-    }
-
-    const id = req.body._id;
+   const id = req.body._id;
     delete req.body._id;
     delete req.body.__v;
 
@@ -105,20 +96,16 @@ class ClientsController extends CrudRestController {
    */
   delete(req, res) {
 
-    if (this._validateRequest(res, ["id"], req.params)) {
-      return;
-    }
-
     ClientModel.findByIdAndUpdate(req.params.id, { active: false }, (err, data) => {
-
       var data = { message: "Client deleted!" };
       this._sendResponse(res, err, data);
     })
   }
 
   getByName(req, res) {
-
-    if (this._validateRequest(res, ["name"], req.req.query)) {
+    var errorMessage= ValidationData(["name"], req.query);
+    if (errorMessage!="") {
+      this._error(res, errorMessage);
       return;
     }
 

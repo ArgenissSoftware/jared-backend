@@ -14,10 +14,7 @@ class AuthController extends BaseRestController {
   }
 
   login(req, res) {
-    if (!this._validateRequest(res, ["email", "password"], req.body)) {
-      return;
-    }
-
+  
     //check format email
     if (!ValidationArgenissFormat(req.body.email)) {
       this._error(res, "Failed to login. Email with invalid format");

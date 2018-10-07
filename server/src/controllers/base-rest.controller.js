@@ -1,5 +1,4 @@
 const express = require('express');
-const ValidationData = require('../helper/validationIncomingData');
 
 /**
  * Base Controller
@@ -67,14 +66,6 @@ class BaseRestController {
     this._success(res, data);
   }
 
-  _validateRequest(res,fieldToValidate, from) {
-    var errorMessage = ValidationData(fieldToValidate, from);
-    if (errorMessage != "") {
-      this._error(res, errorMessage, 500);
-      return false;
-    }
-    return true;
-  }
 }
 
 module.exports = BaseRestController;
