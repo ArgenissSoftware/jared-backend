@@ -24,18 +24,8 @@ class UsersController extends CrudRestController {
    * List resources
    */
   list(req, res) {
-    UserModel.find({ active: true }, '-password', (err, user) => {
-      if (err) {
-        this._error(res, err.message, 500);
-        return
-      }
-
-      let response = {
-        status: 200,
-        data: user ? user : {}
-      }
-
-      res.status(200).json(response).end();
+    UserModel.find({ active: true }, '-password', (err, data) => {
+      this._sendResponse(res, err, data)
     });
   }
 
@@ -89,17 +79,8 @@ class UsersController extends CrudRestController {
    * Get resource
    */
   get(req, res) {
-    UserModel.findById(req.params.id, (error, client) => {
-      if (error) {
-        this._error(res, err.message, 500);
-        return
-      }
-
-      res.status(200).json({
-        status: 200,
-        errorInfo: "",
-        data: client ? client : {}
-      }).end();
+    UserModel.findById(req.params.id, (err, data) => {
+      this._sendResponse(res, err, data);
     });
   }
 
@@ -120,17 +101,13 @@ class UsersController extends CrudRestController {
     }
 
     UserModel.findByIdAndUpdate(id, req.body, (error, user) => {
+
       if (error) {
         this._error(res, 'Failed to update user.');
         return;
       }
-
-      res.status(200).json({
-        status: 200,
-        data: {
-          message: 'User updated!'
-        }
-      });
+      var data = { message: 'User updated!' };
+      this._success(res, data);
     });
   }
 
@@ -152,17 +129,8 @@ class UsersController extends CrudRestController {
       return
     }
 
-    UserModel.findById(req.params.id, 'clients', (err, clients) => {
-      if (err) {
-        this._error(res, err.message);
-        return
-      }
-
-      let response = {
-        status: 200,
-        data: clients ? clients.clients : {}
-      }
-      res.status(200).json(response).end();
+    UserModel.findById(req.params.id, 'clients', (err, data) => {
+     this._sendResponse(res,err,data);
     }).populate('clients');
   }
 

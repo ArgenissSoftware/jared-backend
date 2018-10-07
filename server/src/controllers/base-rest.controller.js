@@ -1,4 +1,5 @@
 const express = require('express');
+const ValidationData = require('../helper/validationIncomingData');
 
 /**
  * Base Controller
@@ -19,7 +20,7 @@ class BaseRestController {
   /**
    * Register routes
    */
-  registerRoutes() {}
+  registerRoutes() { }
 
   /**
    * Send a standard not found 404
@@ -40,6 +41,39 @@ class BaseRestController {
       status: code,
       errors: error,
     }).end();
+  }
+
+  /**
+     * Send a success response
+     * @param {response} res
+     */
+  _success(res, data) {
+    res.status(200).json({
+      status: 200,
+      errorInfo: "",
+      data: data ? data : {}
+    }).end();
+  }
+
+  /**
+   * Send an success response
+   * @param {response} res
+   */
+  _sendResponse(res, err, data) {
+    if (err) {
+      this._error(res, err.message, err.status);
+      return
+    }
+    this._success(res, data);
+  }
+
+  _validateRequest(res,fieldToValidate, from) {
+    var errorMessage = ValidationData(fieldToValidate, from);
+    if (errorMessage != "") {
+      this._error(res, errorMessage, 500);
+      return false;
+    }
+    return true;
   }
 }
 
