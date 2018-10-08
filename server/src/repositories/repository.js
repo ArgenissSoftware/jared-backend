@@ -2,8 +2,6 @@
 const autoBind = require('auto-bind');
 const pg = require('polygoat');
 
-//const castToString = arg => String(arg);
-//const parse = doc => doc && transformProps(doc, castToString, '_id');
 
 /**
  * IRepository implementation for Mongoose
@@ -18,14 +16,7 @@ class MongooseRepository {
     autoBind(this);
   }
 
-  /**
-   * Truncates a collection.
-   * @param {function} cb - callback
-   * @returns {void}
-   */
-  clear(cb) {
-    return pg(done => this.collection.find({}).remove(done), cb);
-  }
+  
 
   /**
    * Counts number of documents
@@ -47,18 +38,18 @@ class MongooseRepository {
 
   /**
    * Finds all instances in the collection.
-   * Very rarely do you actually use this :)
    * @param {function} cb - callback
    * @returns {void}
    */
   findAll(cb) {
-    return pg(done => this.collection.find({}).exec((err, res) => {
+    return pg(done => this.collection.find({ active: true }).exec((err, res) => {
       if (err) {
         return done(err);
       }
       return done(null, res);
     }), cb);
   }
+
 
   /**
    * Find an object.
@@ -154,16 +145,15 @@ class MongooseRepository {
     }), cb);
   }
 
-  validate(entity){
-    
-    if(entity.hasOwnProperty('_id')){
-      return this.collection.validateUpdate();
-    } else {
-      return this.collection.validateCreate();
-    }
-       
+  disable(id, cb) {
+    const self = this;
+    return pg(done => self.collection.findByIdAndUpdate(id, { active: false }).exec((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      done(null, res);
+    }), cb);
   }
-
 }
 
 module.exports = MongooseRepository;

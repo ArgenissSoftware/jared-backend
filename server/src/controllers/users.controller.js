@@ -24,7 +24,7 @@ class UsersController extends CrudRestController {
    * List resources
    */
   list(req, res) {
-    UserModel.find({ active: true }, '-password', (err, data) => {
+    repo.findAll( (err, data) => {
       this._sendResponse(res, err, data)
     });
   }
@@ -95,7 +95,7 @@ class UsersController extends CrudRestController {
    * @param {response} res
    */
   getClients(req, res) {
-    repo.getUserClients(req.params.id, (err, data) => {
+    repo.findUserClients(req.params.id, (err, data) => {
       this._sendResponse(res, err, data);
     })
   }
@@ -108,7 +108,7 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    repo.getByEmail(req.params.email, (err, data) => {
+    repo.findOneByEmail(req.params.email, (err, data) => {
       this._sendResponse(res, err, data);
     });
   }
@@ -121,7 +121,7 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    repo.getByName(req.params.username, (err, data) => {
+    repo.findOneByName(req.params.username, (err, data) => {
       this._sendResponse(res, err, data);
     });
 

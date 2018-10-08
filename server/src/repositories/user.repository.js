@@ -5,22 +5,30 @@ const pg = require('polygoat');
 
 class UsersRepository extends MongooseRepository {
   constructor() {
-   super(UserModel);
+    super(UserModel);
   }
 
-  
-  getUserClients(id, cb) {
-    const self = this;
-    return pg(done => self.collection.findById(
-    id, 'clients').populate('clients').lean().exec((err, res) => {
+  findAll(cb) {
+    return pg(done => this.collection.find({ active: true }, '-password' ).exec((err, res) => {
       if (err) {
         return done(err);
       }
-      done(null, res);
+      return done(null, res);
     }), cb);
   }
 
-  getByEmail(email, cb) {
+  findUserClients(id, cb) {
+    const self = this;
+    return pg(done => self.collection.findById(
+      id, 'clients').populate('clients').lean().exec((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        done(null, res);
+      }), cb);
+  }
+
+  findOneByEmail(email, cb) {
     const self = this;
     return pg(done => self.collection.findOne({ email: email }, '-password').lean().exec((err, res) => {
       if (err) {
@@ -30,7 +38,7 @@ class UsersRepository extends MongooseRepository {
     }), cb);
   }
 
-  getByName(username, cb) {
+  findOneByName(username, cb) {
     const self = this;
     return pg(done => self.collection.findOne({ username: username }, '-password').lean().exec((err, res) => {
       if (err) {
@@ -40,22 +48,32 @@ class UsersRepository extends MongooseRepository {
     }), cb);
   }
 
-  disable(id, cb) {
-    const self = this;
-    return pg(done => self.collection.findByIdAndUpdate(id, { active: false }).exec((err, res) => {
+  /**
+   * Find user by Usename or email.
+   * used to loqin
+   * @param {function} cb - callback
+   * @returns {void}
+   */
+  findOneToLogin( email ,cb) {
+    return pg(done => this.collection.find({ $or: [{ email: email }, { username: email }]},).exec((err, res) => {
       if (err) {
         return done(err);
       }
-      done(null, res);
+      return done(null, res);
+    }), cb);
+  }
+
+  resetExpires( email, token, dateExpire ,cb) {
+    return pg(done => this.collection.findOneAndUpdate({ email: email },  { reset_password_token: token, reset_password_expires: dateExpire}).exec((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      return done(null, res);
     }), cb);
   }
 
 
-
 }
-
-
-
 
 module.exports = UsersRepository;
 

@@ -20,7 +20,9 @@
     "mongoose": "^5.0.1",
     "nodemailer": "^4.6.5",
     "email-templates": "^4.0.1",
-    "ejs": "^2.6.1"
+    "ejs": "^2.6.1", 
+    "polygoat": "^1.1.4",
+    "auto-bind": "^1.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"
