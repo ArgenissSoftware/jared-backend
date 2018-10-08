@@ -73,7 +73,7 @@ class MeController extends BaseRestController {
             var token = buffer.toString('hex');
 
             //86400000 ms = 24hs
-            repoUser.resetExpires(email, token, Date.now() + 60 * 60 * 24 * 1000, (err, user) => {
+            repoUser.resetExpires(req.query.email, token, Date.now() + 60 * 60 * 24 * 1000, (err, user) => {
 
                 if (err) {
                     this._error(res, "User not found");
