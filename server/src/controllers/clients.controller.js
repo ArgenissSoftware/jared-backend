@@ -48,7 +48,7 @@ class ClientsController extends CrudRestController {
         active: true
       });
 
-      newClient.save(function (error, fluffy) {
+      newClient.save((error, data) => {
         if (error) {
           this._error(res, "Failed to create new client.")
         }
