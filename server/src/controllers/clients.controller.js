@@ -2,8 +2,13 @@ const CrudRestController = require('./crud-rest.controller');
 const ClientModel = require('../models/client.model');
 const ValidationData = require('../helper/validationIncomingData');
 
+/**
+ * Clients controllers
+ */
 class ClientsController extends CrudRestController {
-
+  /**
+   * Register controller routes
+   */
   registerRoutes() {
     this.router.get("/byName", this.getByName.bind(this));
     super.registerRoutes();

@@ -4,17 +4,24 @@ const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const jwt = require('jsonwebtoken');
 
-
+/**
+ * Auth controller
+ */
 class AuthController extends BaseRestController {
 
-
+  /**
+   * Register controller routes
+   */
   registerRoutes() {
     this.router.post("/login", this.login.bind(this));
     this.router.get("/refreshToken", this.refreshToken.bind(this));
   }
 
+  /**
+   * Login
+   */
   login(req, res) {
-  
+
     //check format email
     if (!ValidationArgenissFormat(req.body.email)) {
       this._error(res, "Failed to login. Email with invalid format");
@@ -50,7 +57,9 @@ class AuthController extends BaseRestController {
     });
   };
 
-
+  /**
+   * Refresh auth token
+   */
   refreshToken(req, res) {
     var token = req.body.token || req.query.token || req.headers.authorization;
     if (!token) {
@@ -77,7 +86,7 @@ class AuthController extends BaseRestController {
           token: token,
           user: user
         }
-        this._success(res, data);  
+        this._success(res, data);
       });
     });
   };
