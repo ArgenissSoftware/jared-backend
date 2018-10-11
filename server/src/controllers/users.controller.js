@@ -2,6 +2,7 @@ const CrudRestController = require('./crud-rest.controller');
 const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const ValidationData = require('../helper/validationIncomingData');
+const UserRepository = require('../repositories/user.repository');
 
 /**
  * Base Controller
@@ -23,7 +24,8 @@ class UsersController extends CrudRestController {
    * List resources
    */
   list(req, res) {
-    UserModel.find({ active: true }, '-password', (err, data) => {
+    const repo = new UserRepository();
+    repo.findAll((err, data) => {
       this._sendResponse(res, err, data)
     });
   }
@@ -39,11 +41,16 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    // check if user exist
-    UserModel.find({ $or: [{ email: req.body.email }, { username: req.body.username }] }, (err, user) => {
-      if (user.length > 0) {
-        this._error(res, "User already exist!")
-        return
+    req.body.password = PasswordHasher.hashPassword(req.body.password);
+    const repo = new UserRepository();
+    repo.add(req.body, (err, data) => {
+      if (!err) {
+        const token = PasswordHasher.generateToken(data);
+        data = {
+          message: "User created!",
+          token: token,
+          user: data
+        };
       }
 
       var hashPassword = PasswordHasher.hashPassword(req.body.password);
@@ -78,7 +85,8 @@ class UsersController extends CrudRestController {
    * Get resource
    */
   get(req, res) {
-    UserModel.findById(req.params.id, (err, data) => {
+    const repo = new UserRepository();
+    repo.findOne(req.params.id, (err, data) => {
       this._sendResponse(res, err, data);
     });
   }
@@ -87,8 +95,6 @@ class UsersController extends CrudRestController {
    * Get resource
    */
   update(req, res) {
-    const id = req.body._id;
-    delete req.body._id;
     delete req.body.__v;
     delete req.body.password;
 
@@ -98,13 +104,8 @@ class UsersController extends CrudRestController {
       this._error(res, validation.error.details, 422);
       return;
     }
-
-    UserModel.findByIdAndUpdate(id, req.body, (err, data) => {
-
-      if (err) {
-        this._error(res, 'Failed to update user.');
-        return;
-      }
+    const repo = new UserRepository();
+    repo.update(req.body, (err, data) => {
       var data = { message: 'User updated!' };
       this._success(res, data);
     });
@@ -123,10 +124,10 @@ class UsersController extends CrudRestController {
    * @param {response} res
    */
   getClients(req, res) {
-
-    UserModel.findById(req.params.id, 'clients', (err, data) => {
+    const repo = new UserRepository();
+    repo.findUserClients(req.params.id, (err, data) => {
       this._sendResponse(res, err, data);
-    }).populate('clients');
+    });
   }
 
   getByEmail(req, res) {
@@ -137,9 +138,9 @@ class UsersController extends CrudRestController {
       this._error(res, errorMessage);
       return;
     }
-
-    UserModel.find({ email: req.params.email }, '-password', (err, data) => {
-      this._success(res, data);
+    const repo = new UserRepository();
+    repo.findOneByEmail(req.params.email, (err, data) => {
+      this._sendResponse(res, err, data);
     });
   }
 
@@ -150,13 +151,9 @@ class UsersController extends CrudRestController {
       this._error(res, errorMessage);
       return;
     }
-
-    UserModel.findOne({ username: req.params.username }, '-password', (err, data) => {
-      if (err) {
-        this._error(res, errorMessage, 500);
-        return;
-      }
-      this._success(res, data);
+    const repo = new UserRepository();
+    repo.findOneByName(req.params.username, (err, data) => {
+      this._sendResponse(res, err, data);
     });
 
   }
@@ -169,15 +166,11 @@ class UsersController extends CrudRestController {
       this._error(res, errorMessage);
       return;
     }
-
-    UserModel.findByIdAndUpdate(req.params.id, { active: false }, (err, data) => {
-      if (err) {
-        this._error(res, "Failed to delete user.")
-        return
-      }
-      data = {message: "User disabled!"};
-      this._success(res,data);
-    })
+    const repo = new UserRepository();
+    repo.disable(req.params.id, (err, data) => {
+      data = { message: "User disabled!" };
+      this._sendResponse(res, err, data);
+    });
   }
 }
 module.exports = UsersController;

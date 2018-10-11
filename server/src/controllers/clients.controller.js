@@ -1,6 +1,8 @@
 const CrudRestController = require('./crud-rest.controller');
 const ClientModel = require('../models/client.model');
 const ValidationData = require('../helper/validationIncomingData');
+const ClientRepository = require('../repositories/client.repository');
+
 
 /**
  * Clients controllers
@@ -18,22 +20,17 @@ class ClientsController extends CrudRestController {
    * List resources
    */
   list(req, res) {
-    ClientModel.find({ active: true }, (error, client) => {
-
-      if (error) {
-        this._error(res, "Failed to get all clients.", 500);
-        return;
-      }
-      var data = client ? client : {};
-      this._success(res, data);
-    })
+    const repo = new ClientRepository();
+    repo.findAll((err, data) => {
+      this._sendResponse(res, err, data);
+    });
   }
 
   /**
    * Create resource
    */
   create(req, res) {
-
+    const repo = new ClientRepository();
     var validation = ClientModel.validateCreate(req.body);
     if (validation.error) {
       this._error(res, validation.error.details, 422);
@@ -67,8 +64,8 @@ class ClientsController extends CrudRestController {
    * Get resource
    */
   get(req, res) {
-
-    ClientModel.findById(req.params.id, (err, data) => {
+    const repo = new ClientRepository();
+    repo.findOne(req.params.id, (err, data) => {
       this._sendResponse(res, err, data);
     })
   }
@@ -78,7 +75,7 @@ class ClientsController extends CrudRestController {
    */
   update(req, res) {
 
-   const id = req.body._id;
+    const id = req.body._id;
     delete req.body._id;
     delete req.body.__v;
 
@@ -88,8 +85,8 @@ class ClientsController extends CrudRestController {
       this._error(res, validation.error.details, 422);
       return;
     }
-
-    ClientModel.findByIdAndUpdate(id, req.body, (err, data) => {
+    const repo = new ClientRepository();
+    repo.update(req.body, (err, data) => {
       var data = { message: "Client updated!" };
       this._sendResponse(res, err, data);
     });
@@ -101,20 +98,24 @@ class ClientsController extends CrudRestController {
    */
   delete(req, res) {
 
-    ClientModel.findByIdAndUpdate(req.params.id, { active: false }, (err, data) => {
-      var data = { message: "Client deleted!" };
+  }
+
+  disable(req, res) {
+    const repo = new ClientRepository();
+    repo.disable(req.params.id, (err, data) => {
+      var data = { message: "Client disabled!" };
       this._sendResponse(res, err, data);
     })
   }
 
   getByName(req, res) {
-    var errorMessage= ValidationData(["name"], req.query);
-    if (errorMessage!="") {
+    var errorMessage = ValidationData(["name"], req.query);
+    if (errorMessage != "") {
       this._error(res, errorMessage);
       return;
     }
-
-    ClientModel.find({ name: req.query.name }, (err, data) => {
+    const repo = new ClientRepository();
+    repo.findOneByName(req.query.name, (err, data) => {
       this._sendResponse(res, err, data);
     })
 
