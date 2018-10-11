@@ -19,7 +19,7 @@ class BaseRestController {
   /**
    * Register routes
    */
-  registerRoutes() {}
+  registerRoutes() { }
 
   /**
    * Send a standard not found 404
@@ -41,6 +41,31 @@ class BaseRestController {
       errors: error,
     }).end();
   }
+
+  /**
+     * Send a success response
+     * @param {response} res
+     */
+  _success(res, data) {
+    res.status(200).json({
+      status: 200,
+      errorInfo: "",
+      data: data ? data : {}
+    }).end();
+  }
+
+  /**
+   * Send an success response
+   * @param {response} res
+   */
+  _sendResponse(res, err, data) {
+    if (err) {
+      this._error(res, err.message, err.status);
+      return
+    }
+    this._success(res, data);
+  }
+
 }
 
 module.exports = BaseRestController;

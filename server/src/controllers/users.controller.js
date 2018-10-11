@@ -1,7 +1,7 @@
-const express = require('express');
 const CrudRestController = require('./crud-rest.controller');
 const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
+const ValidationData = require('../helper/validationIncomingData');
 
 /**
  * Base Controller
@@ -12,26 +12,19 @@ class UsersController extends CrudRestController {
    * Register controller routes
    */
   registerRoutes() {
-    super.registerRoutes();
     this.router.get('/:id/clients', this.getClients.bind(this));
+    this.router.get("/username/:username", this.getByUsername.bind(this));
+    this.router.get("/email/:email", this.getByEmail.bind(this));
+    this.router.put("/disable/:id", this.disable.bind(this));
+    super.registerRoutes();
   }
 
   /**
    * List resources
    */
   list(req, res) {
-    UserModel.find({ active: true }, '-password', (err, user) =>{
-      if(err) {
-        this._error(res, err.message, 500);
-        return
-      }
-
-      let response = {
-        status: 200,
-        data: user ? user : {}
-      }
-
-      res.status(200).json(response).end();
+    UserModel.find({ active: true }, '-password', (err, data) => {
+      this._sendResponse(res, err, data)
     });
   }
 
@@ -47,7 +40,7 @@ class UsersController extends CrudRestController {
     }
 
     // check if user exist
-    UserModel.find({ $or : [ { email: req.body.email }, { username: req.body.username } ] }, (err, user) => {
+    UserModel.find({ $or: [{ email: req.body.email }, { username: req.body.username }] }, (err, user) => {
       if (user.length > 0) {
         this._error(res, "User already exist!")
         return
@@ -63,19 +56,19 @@ class UsersController extends CrudRestController {
       });
 
       newUser.save((error, fluffy) => {
-        if(error){
+        if (error) {
           this._error(res, "Failed to create new user.")
         }
 
         const token = PasswordHasher.generateToken(newUser);
         res.status(200).json({
-            status: 200,
-            errorInfo: "",
-            data: {
-                message: "User created!",
-                token: token,
-                user: user
-            }
+          status: 200,
+          errorInfo: "",
+          data: {
+            message: "User created!",
+            token: token,
+            user: user
+          }
         });
       });
     });
@@ -85,17 +78,8 @@ class UsersController extends CrudRestController {
    * Get resource
    */
   get(req, res) {
-    UserModel.findById(req.params.id, (error, client) => {
-      if (error){
-        this._error(res, err.message, 500);
-        return
-      }
-
-      res.status(200).json({
-        status: 200,
-        errorInfo: "",
-        data: client ? client : {}
-      }).end();
+    UserModel.findById(req.params.id, (err, data) => {
+      this._sendResponse(res, err, data);
     });
   }
 
@@ -115,18 +99,14 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    UserModel.findByIdAndUpdate(id, req.body, (error, user) => {
-      if(error){
+    UserModel.findByIdAndUpdate(id, req.body, (err, data) => {
+
+      if (err) {
         this._error(res, 'Failed to update user.');
         return;
       }
-
-      res.status(200).json({
-        status: 200,
-        data: {
-            message: 'User updated!'
-        }
-      });
+      var data = { message: 'User updated!' };
+      this._success(res, data);
     });
   }
 
@@ -143,24 +123,61 @@ class UsersController extends CrudRestController {
    * @param {response} res
    */
   getClients(req, res) {
-    if(!req.params.id) {
-      this._error(res, 'id is required', 500);
-      return
-    }
 
-    UserModel.findById( req.params.id , 'clients', (err, clients) =>{
-        if(err) {
-          this._error(res, err.message);
-          return
-        }
-
-        let response = {
-            status: 200,
-            data: clients ? clients.clients : {}
-        }
-        res.status(200).json(response).end();
+    UserModel.findById(req.params.id, 'clients', (err, data) => {
+      this._sendResponse(res, err, data);
     }).populate('clients');
   }
-}
 
+  getByEmail(req, res) {
+    var fieldToValidate = ["email"];
+    var errorMessage = ValidationData(fieldToValidate, req.params);
+
+    if (errorMessage != "") {
+      this._error(res, errorMessage);
+      return;
+    }
+
+    UserModel.find({ email: req.params.email }, '-password', (err, data) => {
+      this._success(res, data);
+    });
+  }
+
+  getByUsername(req, res) {
+    var fieldToValidate = ["username"];
+    var errorMessage = ValidationData(fieldToValidate, req.params);
+    if (errorMessage !== "") {
+      this._error(res, errorMessage);
+      return;
+    }
+
+    UserModel.findOne({ username: req.params.username }, '-password', (err, data) => {
+      if (err) {
+        this._error(res, errorMessage, 500);
+        return;
+      }
+      this._success(res, data);
+    });
+
+  }
+
+  disable(req, res) {
+    var fieldToValidate = ["id"];
+    var errorMessage = ValidationData(fieldToValidate, req.params);
+
+    if (errorMessage != "") {
+      this._error(res, errorMessage);
+      return;
+    }
+
+    UserModel.findByIdAndUpdate(req.params.id, { active: false }, (err, data) => {
+      if (err) {
+        this._error(res, "Failed to delete user.")
+        return
+      }
+      data = {message: "User disabled!"};
+      this._success(res,data);
+    })
+  }
+}
 module.exports = UsersController;
