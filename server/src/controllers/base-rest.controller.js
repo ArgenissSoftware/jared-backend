@@ -43,9 +43,9 @@ class BaseRestController {
   }
 
   /**
-     * Send a success response
-     * @param {response} res
-     */
+   * Send a success response
+   * @param {response} res
+   */
   _success(res, data) {
     res.status(200).json({
       status: 200,
