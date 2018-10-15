@@ -138,8 +138,6 @@ class MeController extends BaseRestController {
       else {
         updateUserPassword(req, res);
       }
-
-
     })
   }
 

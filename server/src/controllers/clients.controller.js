@@ -13,6 +13,7 @@ class ClientsController extends CrudRestController {
    */
   registerRoutes() {
     this.router.get("/byName", this.getByName.bind(this));
+    this.router.put("/disable/:id", this.disable.bind(this));
     super.registerRoutes();
   }
 
@@ -36,27 +37,9 @@ class ClientsController extends CrudRestController {
       this._error(res, validation.error.details, 422);
       return;
     }
-
-    // check if client exist
-    ClientModel.find({ $or: [{ name: req.body.name }] }, (err, client) => {
-      if (client.length > 0) {
-        this._error(res, "Client already exist!")
-        return
-      }
-
-      var newClient = new ClientModel({
-        name: req.body.name,
-        employees: req.body.employees,
-        active: true
-      });
-
-      newClient.save((error, data) => {
-        if (error) {
-          this._error(res, "Failed to create new client.")
-        }
-        var data = { message: "Client created!" };
-        this._success(res, data);
-      });
+    repo.add(req.body, (err, data) => {
+      var data = { message: "Client created!" };
+      this._sendResponse(res, err, data);
     });
   }
 
@@ -74,11 +57,7 @@ class ClientsController extends CrudRestController {
    * Get resource
    */
   update(req, res) {
-
-    const id = req.body._id;
-    delete req.body._id;
     delete req.body.__v;
-
     var validation = ClientModel.validateUpdate(req.body);
     if (validation.error) {
       // validation error
@@ -105,7 +84,7 @@ class ClientsController extends CrudRestController {
     repo.disable(req.params.id, (err, data) => {
       var data = { message: "Client disabled!" };
       this._sendResponse(res, err, data);
-    })
+    });
   }
 
   getByName(req, res) {

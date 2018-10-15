@@ -1,6 +1,5 @@
 const BaseRestController = require('./base-rest.controller');
 const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
-const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../repositories/user.repository');

@@ -10,7 +10,7 @@ var userModel = mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    active: Boolean,
+    active: { type:  Boolean , default: true },
     admin: Boolean,
     //employee data
     name: String,
@@ -47,6 +47,8 @@ var userModel = mongoose.Schema({
  */
 const userValidation = Joi.object().keys({
   id: Joi.string(),
+  _id: Joi.string(),
+  __v: Joi.any(),
   username: Joi.string().min(3).max(15).required(),
   email: argenissEmail.required(),
   password: Joi.string().min(6).max(8),
@@ -88,4 +90,4 @@ userModel.statics.validateUpdate =  (data) => {
   return Joi.validate(data, userValidation, { abortEarly: false });
 };
 
-module.exports = mongoose.model( "Usermodel", userModel );
+module.exports = mongoose.model( "UserModel", userModel );
