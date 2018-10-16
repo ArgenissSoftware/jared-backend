@@ -39,7 +39,12 @@ var userModel = mongoose.Schema({
     clients: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'ClientModel'
-    }]
+    }],
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'RoleModel'
+    },
+
 });
 
 /**
@@ -69,7 +74,8 @@ const userValidation = Joi.object().keys({
   alarmCode: Joi.string().min(3).max(50),
   githubID: Joi.string().min(3).max(50),
   relation: Joi.any().valid(['freelance', 'hired']),
-  clients: Joi.array().unique((a, b) => a.id === b.id)
+  clients: Joi.array().unique((a, b) => a.id === b.id),
+  role:  Joi.required()
 });
 
 /**

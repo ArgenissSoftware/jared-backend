@@ -52,7 +52,8 @@ class UsersController extends CrudRestController {
         email: req.body.email,
         username: req.body.username,
         password: hashPassword,
-        active: true
+        active: true,
+        role: req.body.role
       });
 
       newUser.save((error, fluffy) => {
