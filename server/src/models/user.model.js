@@ -75,7 +75,6 @@ const userValidation = Joi.object().keys({
   githubID: Joi.string().min(3).max(50),
   relation: Joi.any().valid(['freelance', 'hired']),
   clients: Joi.array().unique((a, b) => a.id === b.id),
-  role:  Joi.required()
 });
 
 /**

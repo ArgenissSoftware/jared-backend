@@ -1,5 +1,6 @@
 const CrudRestController = require('./crud-rest.controller');
 const UserModel = require('../models/user.model');
+const RoleModel = require('../models/role.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const ValidationData = require('../helper/validationIncomingData');
 
@@ -46,32 +47,42 @@ class UsersController extends CrudRestController {
         return
       }
 
-      var hashPassword = PasswordHasher.hashPassword(req.body.password);
-
-      var newUser = new UserModel({
-        email: req.body.email,
-        username: req.body.username,
-        password: hashPassword,
-        active: true,
-        role: req.body.role
-      });
-
-      newUser.save((error, fluffy) => {
-        if (error) {
-          this._error(res, "Failed to create new user.")
-        }
-
-        const token = PasswordHasher.generateToken(newUser);
-        res.status(200).json({
-          status: 200,
-          errorInfo: "",
-          data: {
-            message: "User created!",
-            token: token,
-            user: user
+      // select default user role for this action.
+      RoleModel.findOne({ name: 'customer' }, '_id', (err, userRole) => {
+          if (err) {
+              this._error(res, "Role doens't exists.")
+              return
           }
-        });
+
+          var hashPassword = PasswordHasher.hashPassword(req.body.password);
+          var newUser = new UserModel({
+              email: req.body.email,
+              username: req.body.username,
+              password: hashPassword,
+              active: true,
+              role: userRole._id
+          });
+
+          newUser.save((error, fluffy) => {
+              if (error) {
+                this._error(res, "Failed to create new user.")
+                return;
+              }
+
+              const token = PasswordHasher.generateToken(newUser);
+              res.status(200).json({
+                status: 200,
+                errorInfo: "",
+                data: {
+                  message: "User created!",
+                  token: token,
+                  user: user
+                }
+              });
+            });
+
       });
+
     });
   }
 
