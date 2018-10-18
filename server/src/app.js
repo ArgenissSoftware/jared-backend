@@ -54,8 +54,6 @@ server.get('/', (req, res) => {
   res.send('Ping!\n');
 });
 
-console.log(routes);
-
 // import routes config with all other routes
 server.use("/api", routes);
 
