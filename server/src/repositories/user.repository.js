@@ -1,4 +1,3 @@
-'use strict'
 const MongooseRepository = require('./repository');
 const UserModel = require('../models/user.model');
 

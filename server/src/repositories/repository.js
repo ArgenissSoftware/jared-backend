@@ -1,7 +1,3 @@
-'use strict';
-const autoBind = require('auto-bind');
-
-
 /**
  * IRepository implementation for Mongoose
  * @class MongooseRepository
@@ -12,7 +8,6 @@ class MongooseRepository {
       throw new Error('Mongoose model type cannot be null.');
     }
     this.collection = model;
-    autoBind(this);
   }
 
 
