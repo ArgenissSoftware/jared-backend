@@ -16,8 +16,7 @@ class UsersRepository extends MongooseRepository {
     });
   }
   /**
-  * Find user Clients.
-  * used to loqin
+  * Find user's clients.
   * @param {function} cb - callback
   */
   findUserClients(id, cb) {
