@@ -1,8 +1,11 @@
 'use strict';
 
 const bodyParser = require('body-parser');
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 const express = require('express');
-var cors = require('cors')
+var cors = require('cors');
+
 const database = require('./database');
 var env = process.env.NODE_ENV || 'development';
 const config = require('./config/config')[env];
@@ -10,6 +13,7 @@ var jwt = require('express-jwt');
 
 // App
 const server = express();
+
 
 // view engine setup
 server.engine('html', require('ejs').renderFile);
@@ -50,11 +54,18 @@ server.get('/', (req, res) => {
   res.send('Ping!\n');
 });
 
+console.log(routes);
+
 // import routes config with all other routes
 server.use("/api", routes);
 
+// Adding swagger.
+server.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 //expose templates and images as public
 server.use(express.static(__dirname + '/public'));
+
+
 
 server.listen(server.get('port'), function() {
   console.log('Server is running on port', server.get('port'));

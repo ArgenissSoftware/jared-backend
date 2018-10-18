@@ -1,0 +1,1061 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API documentation of the ERP Jared, developed by Argeniss Software.",
+    "version": "1.0.0",
+    "title": "Jared API",
+    "termsOfService": "https://github.com/ArgenissSoftware/jared-backend/blob/master/README.md",
+    "contact": {
+      "email": "info@argeniss.com"
+    },
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "clients",
+      "description": "Basic CRUD operations for the clients of the app."
+    },
+    {
+      "name": "auth",
+      "description": "Methods to log in users in the app."
+    },
+    {
+      "name": "me",
+      "description": "Operations so that the registered user manages his password."
+    },
+    {
+      "name": "users",
+      "description": "Basic CRUD operations for the users of the app."
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/clients": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Gets all the clients",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetClientListResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Creates a new client in the app",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client object to add in the app",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateClient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, user created"
+          },
+          "400": {
+            "description": "Client already exist."
+          },
+          "422": {
+            "description": "There where found one or more validation errors."
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Gets a client for it's id",
+        "description": "Returns a single client for it's id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of client to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetClientResponse"
+            }
+          },
+          "400": {
+            "description": "Cast to ObjectId failed for value"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Deletes an already existing client of the app",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the client to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, client deleted"
+          },
+          "400": {
+            "description": "Cast to ObjectId failed for value"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Update data from a client",
+        "description": "Update the info from a client via it's ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of client to return",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client object to add in the app",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateClient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "422": {
+            "description": "Failed to update user, there are one or more validation errors."
+          }
+        }
+      }
+    },
+    "/clients/byName": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Gets a client by it's name",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of the client",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetClientResponse"
+            }
+          },
+          "400": {
+            "description": "Name is empty or null"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gets all the users",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetUserListResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Creates a new user in the app",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client object to add in the app",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, user created"
+          },
+          "400": {
+            "description": "Create failed, email or username already registered."
+          },
+          "422": {
+            "description": "Create failed, there were one or more validation errors."
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gets a user for it's id.",
+        "description": "Returns a single user for it's id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetUserResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Deletes an already existing user of the app.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to delete.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, user deleted."
+          },
+          "400": {
+            "description": "Cast to ObjectId failed for value."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update data from a user",
+        "description": "Update the info from a user via it's ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object to add in the app.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, user updated."
+          },
+          "400": {
+            "description": "Update failed, cast to ObjectId failed for value."
+          },
+          "422": {
+            "description": "Update failed, there were one or more validation errors."
+          }
+        }
+      }
+    },
+    "/users/{id}/clients": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gets all the clients from one user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to get it's clients.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetUserClientsResponse"
+            }
+          },
+          "400": {
+            "description": "Get failed, cast to ObjectId failed for value."
+          }
+        }
+      }
+    },
+    "/users/username/{username}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gets an user by it's user account name.",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "User account name to search the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetUserResponse"
+            }
+          },
+          "400": {
+            "description": "Username can't be empty"
+          }
+        }
+      }
+    },
+    "/users/email/{email}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Gets an user by it's email account.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Email account to search the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Email can't be empty"
+          }
+        }
+      }
+    },
+    "/users/disable/{id}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Disables an user",
+        "description": "Pass the user ID to disable the user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to disable",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, user disabled"
+          },
+          "400": {
+            "description": "Cast to ObjectId failed for value"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Operation to log in a user into the application.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User info to log in.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogInBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, login correct"
+          },
+          "400": {
+            "description": "Failed to login, Invalid password or user does not exist with invalid format."
+          },
+          "500": {
+            "description": "Error, password invalid."
+          }
+        }
+      }
+    },
+    "/auth/refreshToken": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Operation to refresh JWT token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Token to refresh",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, token refreshed"
+          },
+          "401": {
+            "description": "Invalid (or secret) token"
+          },
+          "500": {
+            "description": "Invalid user or token"
+          }
+        }
+      }
+    },
+    "/me/{id}/update_password": {
+      "put": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Operation to update an user password",
+        "description": "Use the user ID in path, then pass the new password and it's confirmation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID to update it's password",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New password of the user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewPasswordBody"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success, password updated."
+          },
+          "500": {
+            "description": "Password update failed, passwords doesn't match."
+          }
+        }
+      }
+    },
+    "/me/forgot_password": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Operation to send in a specified mail the user's password.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email of the user that has forgotten his password",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Email can't be empty or null"
+          }
+        }
+      }
+    },
+    "/me/reset_password": {
+      "put": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Operation to reset user's password",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User information for password resetting",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordResetBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PasswordResetBody": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id of the user to reset password"
+        },
+        "token": {
+          "type": "string",
+          "description": "Password reset token send via mail"
+        },
+        "password": {
+          "type": "string",
+          "description": "New password of the user"
+        },
+        "password_confirmation": {
+          "type": "string",
+          "description": "Confirmation of the new password"
+        }
+      },
+      "required": [
+        "id",
+        "token",
+        "password",
+        "confirm_password"
+      ]
+    },
+    "NewPasswordBody": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "New password for the user"
+        },
+        "password_confirmation": {
+          "type": "string",
+          "description": "Password confirmation field"
+        }
+      }
+    },
+    "UserLogInBody": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email of the user to log in the app."
+        },
+        "password": {
+          "type": "string",
+          "description": "Password of the user to log in the app."
+        }
+      }
+    },
+    "CreateUser": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Name of the user account."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the user to log in the app."
+        },
+        "password": {
+          "type": "string",
+          "description": "Password of the user to log in the app."
+        }
+      },
+      "required": [
+        "email",
+        "username",
+        "password"
+      ]
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "ID of the user account"
+        },
+        "username": {
+          "type": "string",
+          "description": "Name of the user account."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the user to log in the app."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user itself."
+        },
+        "surname": {
+          "type": "string",
+          "description": "Surname of the user itself."
+        },
+        "cuil": {
+          "type": "string",
+          "description": "Codigo unico de identificacion laboral, it has eleven digits."
+        },
+        "visa": {
+          "type": "string",
+          "description": "Date of the visa."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address to contact the user."
+        },
+        "phone": {
+          "type": "string",
+          "description": "User telephone number."
+        },
+        "cellphone": {
+          "type": "string",
+          "description": "User cellphone number."
+        },
+        "birthday": {
+          "type": "string",
+          "description": "Birth date of the user."
+        },
+        "skype": {
+          "type": "string",
+          "description": "Skype account id of the user"
+        },
+        "childerenCount": {
+          "type": "number",
+          "description": "Number of childeren of the user"
+        },
+        "career": {
+          "type": "string",
+          "description": "Career description of the user"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the user"
+        },
+        "startWorkDate": {
+          "type": "string",
+          "description": "Date when the user started working"
+        },
+        "alarmCode": {
+          "type": "string",
+          "description": "Alarmcode of the user"
+        },
+        "githubID": {
+          "type": "string",
+          "description": "Github ID of the user"
+        },
+        "relation": {
+          "type": "string",
+          "description": "User relation to the company. It could be freelance or hired."
+        },
+        "clients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID of the client"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "username"
+      ]
+    },
+    "GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "relation": {
+          "type": "string",
+          "description": "Users relation to the company"
+        },
+        "clients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID of the client"
+              }
+            }
+          }
+        },
+        "_id": {
+          "type": "string",
+          "description": "ID of the user account"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the user to log in the app."
+        },
+        "username": {
+          "type": "string",
+          "description": "Name of the user account."
+        },
+        "password": {
+          "type": "string",
+          "description": "Password of the user to log in the app"
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Determines if the user is active or not."
+        },
+        "_v": {
+          "type": "string",
+          "description": "Mongoose version key"
+        },
+        "reset_password_expires": {
+          "type": "string",
+          "description": "Date when the token expires."
+        },
+        "reset_password_token": {
+          "type": "string",
+          "description": "Token for password reset"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address to contact the user."
+        },
+        "alarmCode": {
+          "type": "string",
+          "description": "Alarmcode of the user"
+        },
+        "birthday": {
+          "type": "string",
+          "description": "Birth date of the user."
+        },
+        "career": {
+          "type": "string",
+          "description": "Career description of the user"
+        },
+        "cellphone": {
+          "type": "string",
+          "description": "User cellphone number."
+        },
+        "childerenCount": {
+          "type": "number",
+          "description": "Number of childeren of the user"
+        },
+        "cuil": {
+          "type": "string",
+          "description": "Codigo unico de identificacion laboral, it has eleven digits."
+        },
+        "githubID": {
+          "type": "string",
+          "description": "Github ID of the user"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user itself."
+        },
+        "passport": {
+          "type": "string",
+          "description": "Passport number of the user"
+        },
+        "surname": {
+          "type": "string",
+          "description": "Surname of the user itself."
+        },
+        "phone": {
+          "type": "string",
+          "description": "User telephone number."
+        },
+        "skype": {
+          "type": "string",
+          "description": "Skype account id of the user"
+        },
+        "startWorkDate": {
+          "type": "string",
+          "description": "Date when the user started working."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the user."
+        },
+        "visa": {
+          "type": "string",
+          "description": "Date of the visa."
+        }
+      }
+    },
+    "CreateClient": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the client"
+        },
+        "employees": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID of the employee"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "UpdateClient": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "ID of the client"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the client"
+        },
+        "url": {
+          "type": "string",
+          "description": "Url of the client"
+        },
+        "contactName": {
+          "type": "string",
+          "description": "Contact name of the client"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the client"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the client"
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Determines if client is active or not"
+        },
+        "employees": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID of the employee"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "_id",
+        "name"
+      ]
+    },
+    "GetClientResponse": {
+      "type": "object",
+      "properties": {
+        "employees": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID of the employee"
+              }
+            }
+          }
+        },
+        "_id": {
+          "type": "number",
+          "description": "identifier."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the client."
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Determines if the client is active."
+        },
+        "_v": {
+          "type": "number",
+          "description": "Mongoose version key."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address to contact the client."
+        },
+        "contactName": {
+          "type": "string",
+          "description": "Name to contact the client"
+        },
+        "url": {
+          "type": "string",
+          "description": "Client's URL"
+        }
+      }
+    },
+    "GetClientListResponse": {
+      "required": [
+        "clients"
+      ],
+      "properties": {
+        "clients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GetClientResponse"
+          }
+        }
+      }
+    },
+    "GetUserListResponse": {
+      "required": [
+        "users"
+      ],
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GetUserResponse"
+          }
+        }
+      }
+    },
+    "GetUserClientsResponse": {
+      "required": [
+        "clients",
+        "_id"
+      ],
+      "properties": {
+        "clients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GetClientResponse"
+          }
+        },
+        "_id": {
+          "type": "string",
+          "description": "ID of the user"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
