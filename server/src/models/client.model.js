@@ -14,12 +14,14 @@ var clientModel = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserModel'
     }],
-    active: Boolean
+    active: { type: Boolean, default: true }
 });
 
 
 const clientValidation = Joi.object().keys({
     id: Joi.string(),
+    _id: Joi.string(),
+    __v: Joi.any(),
     name: Joi.string().min(3).max(100).required(),
     contactName: Joi.string().min(3).max(50),
     email: commonEmail,
@@ -30,13 +32,18 @@ const clientValidation = Joi.object().keys({
 });
 
 /**
+ * Indexes
+ */
+clientModel.index({name: 1}, {unique: true});
+
+/**
  * Validation methods
  */
 clientModel.statics.validateCreate = (data) => {
     return Joi.validate(data, clientValidation, { abortEarly: false });
-  };
-clientModel.statics.validateUpdate =  (data) => {
+};
+clientModel.statics.validateUpdate = (data) => {
     return Joi.validate(data, clientValidation, { abortEarly: false });
-  };
+};
 
-module.exports = mongoose.model( "ClientModel", clientModel );
+module.exports = mongoose.model("ClientModel", clientModel);

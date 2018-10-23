@@ -1,8 +1,10 @@
 const BaseRestController = require('./base-rest.controller');
 const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
-const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const jwt = require('jsonwebtoken');
+const UserRepository = require('../repositories/user.repository');
+
+
 
 /**
  * Auth controller
@@ -29,7 +31,8 @@ class AuthController extends BaseRestController {
     }
 
     // check if user exist
-    var query = UserModel.find({ $or: [{ email: req.body.email }, { username: req.body.email }] }, (err, result) => {
+    const repo = new UserRepository();
+    repo.findOneToLogin(req.body.email, (err, result) => {
       let user = null
       if (result.length > 0) {
         user = result[0]
@@ -69,25 +72,20 @@ class AuthController extends BaseRestController {
       if (err) {
         return res.status(401).json({ message: 'Invalid Token or secret' });
       }
-      UserModel.findById({
-        '_id': user._id
-      }, function (err, usr) {
-        if (err) {
-          res.status(500).json({
-            status: 500,
-            errorInfo: "Invalid user or token",
-            data: {}
-          }).end();
-          return;
-        }
-        var token = PasswordHasher.generateToken(usr);
-        var data= {
-          message: "Refresh Token OK",
-          token: token,
-          user: user
-        }
-        this._success(res, data);
-      });
+      const repo = new UserRepository();
+      repo.findOne(
+        user._id
+        , (err, data) => {
+          if (!err) {
+            const token = PasswordHasher.generateToken(data);
+            data = {
+              message: "Refresh Token OK",
+              token: token,
+              user: data
+            };
+          }
+          this._success(res, data);
+        });
     });
   };
 
