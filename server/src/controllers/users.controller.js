@@ -3,6 +3,9 @@ const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
 const ValidationData = require('../helper/validationIncomingData');
 const UserRepository = require('../repositories/user.repository');
+const RoleRepository = require('../repositories/role.repository');
+
+
 /**
  * Base Controller
  */
@@ -40,19 +43,57 @@ class UsersController extends CrudRestController {
       return;
     }
 
-    req.body.password = PasswordHasher.hashPassword(req.body.password);
-    const repo = new UserRepository();
-    repo.add(req.body, (err, data) => {
-      if (!err) {
-        const token = PasswordHasher.generateToken(data);
-        data = {
-          message: "User created!",
-          token: token,
-          user: data
-        };
-      }
-      this._sendResponse(res, err, data);
-    });
+    const rolesRepository = new RoleRepository();
+
+    if (req.body.role) {
+        rolesRepository.findOne({_id: req.body.role}, (err, userRole) => {
+            if (err) {
+                this._error(res, "Role doesn't exists.")
+                return
+            }
+            req.body.role = userRole._id;
+            req.body.password = PasswordHasher.hashPassword(req.body.password);
+
+            const repo = new UserRepository();
+            repo.add(req.body, (err, data) => {
+              if (!err) {
+                const token = PasswordHasher.generateToken(data);
+                data = {
+                  message: "User created!",
+                  token: token,
+                  user: data
+                };
+              }
+              this._sendResponse(res, err, data);
+            });
+        });
+    } else {
+        // By default, the user is 'customer'
+        rolesRepository.findOneByName('customer', (err, userRole) => {
+            if (err) {
+                this._error(res, "Role doesn't exists.")
+                return
+            }
+            req.body.role = userRole._id;
+            req.body.password = PasswordHasher.hashPassword(req.body.password);
+
+            const repo = new UserRepository();
+            repo.add(req.body, (err, data) => {
+              if (!err) {
+                const token = PasswordHasher.generateToken(data);
+                data = {
+                  message: "User created!",
+                  token: token,
+                  user: data
+                };
+              }
+              this._sendResponse(res, err, data);
+            });
+
+        });
+    }
+
+
   }
 
   /**
