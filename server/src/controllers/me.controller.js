@@ -6,7 +6,6 @@ const PasswordHasher = require('../helper/passwordHasher');
 const UserRepository = require('../repositories/user.repository');
 
 
-
 /**
  * Profile controller
  */

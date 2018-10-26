@@ -5,8 +5,15 @@ const BaseRestController = require('./base-rest.controller');
  */
 class CrudRestController extends BaseRestController {
 
-  setModel(model) {
-    this.model = model;
+  /**
+   * Constructor
+   * @param {string} basePath
+   * @param {parentRouter} parentRouter
+   * @param {Repository} repository
+   */
+  constructor(basePath, parentRouter, repository) {
+    super(basePath, parentRouter);
+    this.repository = repository;
   }
 
   /**
@@ -23,36 +30,76 @@ class CrudRestController extends BaseRestController {
   /**
    * List resources
    */
-  list(req, res) {
-    this._notFound(res);
+  async list(req, res) {
+    try {
+      const data = await this.repository.findAll();
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 
   /**
    * Create resource
    */
-  create(req, res) {
-    this._notFound(res);
+  async create(req, res) {
+    var validation = this.repository.model.validateCreate(req.body);
+    if (validation.error) {
+      this._error(res, validation.error.details, 422);
+      return;
+    }
+    try {
+      const data = await this.repository.add(req.body);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 
   /**
    * Get resource
    */
-  get(req, res) {
-    this._notFound(res);
+  async get(req, res) {
+    try {
+      const data = await this.repository.findOne(req.params.id);
+      if (!data) return this._notFound(res);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 
   /**
    * Get resource
    */
-  update(req, res) {
-    this._notFound(res);
+  async update(req, res) {
+    delete req.body.__v;
+    delete req.body.password;
+
+    var validation = this.repository.model.validateUpdate(req.body);
+    if (validation.error) {
+      this._error(res, validation.error.details, 422);
+      return;
+    }
+
+    try {
+      const data = await this.repository.update(req.body);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 
   /**
    * Delete resource
    */
-  delete(req, res) {
-    this._notFound(res);
+  async delete(req, res) {
+    try {
+      const data = await this.repository.remove(req.params.id);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 }
 

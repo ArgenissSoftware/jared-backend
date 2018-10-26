@@ -7,12 +7,9 @@ class ClientsRepository extends MongooseRepository {
   }
   /**
    * Find client by name.
-   * @param {function} cb - callback
    */
-  findOneByName(name, cb) {
-    return this.collection.findOne({ name: name }).lean().exec((err, res) => {
-      cb(err, res);
-    });
+  findOneByName(name) {
+    return this.model.findOne({ name: name }).lean().exec();
   }
 
 }

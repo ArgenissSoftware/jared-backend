@@ -1,15 +1,21 @@
 const CrudRestController = require('./crud-rest.controller');
-const UserModel = require('../models/user.model');
 const PasswordHasher = require('../helper/passwordHasher');
-const ValidationData = require('../helper/validationIncomingData');
 const UserRepository = require('../repositories/user.repository');
 const RoleRepository = require('../repositories/role.repository');
-
 
 /**
  * Base Controller
  */
 class UsersController extends CrudRestController {
+
+  /**
+   * Constructor
+   * @param {string} basePath
+   * @param {parentRouter} parentRouter
+   */
+  constructor(basePath, parentRouter) {
+    super(basePath, parentRouter, new UserRepository());
+  }
 
   /**
    * Register controller routes
@@ -23,20 +29,10 @@ class UsersController extends CrudRestController {
   }
 
   /**
-   * List resources
-   */
-  list(req, res) {
-    const repo = new UserRepository();
-    repo.findAll((err, data) => {
-      this._sendResponse(res, err, data)
-    });
-  }
-
-  /**
    * Create resource
    */
-  create(req, res) {
-    var validation = UserModel.validateUpdate(req.body);
+  async create(req, res) {
+    var validation = this.repository.model.validateUpdate(req.body);
     if (validation.error) {
       // validation error
       this._error(res, validation.error.details, 422);
@@ -44,92 +40,35 @@ class UsersController extends CrudRestController {
     }
 
     const rolesRepository = new RoleRepository();
+    let userRole;
 
-    if (req.body.role) {
-        rolesRepository.findOne({_id: req.body.role}, (err, userRole) => {
-            if (err) {
-                this._error(res, "Role doesn't exists.")
-                return
-            }
-            req.body.role = userRole._id;
-            req.body.password = PasswordHasher.hashPassword(req.body.password);
+    try {
+      if (req.body.role) {
+        userRole = await rolesRepository.findOne({_id: req.body.role});
+        if (!userRole) {
+          this._error(res, "Role doesn't exists.")
+          return
+        }
+      } else {
+        userRole = await rolesRepository.findOrCreate('Developer');
+      }
 
-            const repo = new UserRepository();
-            repo.add(req.body, (err, data) => {
-              if (!err) {
-                const token = PasswordHasher.generateToken(data);
-                data = {
-                  message: "User created!",
-                  token: token,
-                  user: data
-                };
-              }
-              this._sendResponse(res, err, data);
-            });
-        });
-    } else {
-        // By default, the user is 'customer'
-        rolesRepository.findOneByName('customer', (err, userRole) => {
-            if (err) {
-                this._error(res, "Role doesn't exists.")
-                return
-            }
-            req.body.role = userRole._id;
-            req.body.password = PasswordHasher.hashPassword(req.body.password);
+      req.body.role = userRole._id;
+      req.body.password = PasswordHasher.hashPassword(req.body.password);
 
-            const repo = new UserRepository();
-            repo.add(req.body, (err, data) => {
-              if (!err) {
-                const token = PasswordHasher.generateToken(data);
-                data = {
-                  message: "User created!",
-                  token: token,
-                  user: data
-                };
-              }
-              this._sendResponse(res, err, data);
-            });
+      const user = await this.repository.add(req.body);
 
-        });
+      const token = PasswordHasher.generateToken(user);
+      const data = {
+        message: "User created!",
+        token: token,
+        user: user
+      };
+      this._success(res, data);
+    } catch (e) {
+      console.error(e);
+      this._error(res, e);
     }
-
-
-  }
-
-  /**
-   * Get resource
-   */
-  get(req, res) {
-    const repo = new UserRepository();
-    repo.findOne(req.params.id, (err, data) => {
-      this._sendResponse(res, err, data);
-    });
-  }
-
-  /**
-   * Get resource
-   */
-  update(req, res) {
-    delete req.body.__v;
-    delete req.body.password;
-
-    var validation = UserModel.validateUpdate(req.body);
-    if (validation.error) {
-      this._error(res, validation.error.details, 422);
-      return;
-    }
-    const repo = new UserRepository();
-    repo.update(req.body, (err, data) => {
-      var data = { message: 'User updated!' };
-      this._sendResponse(res, err, data);
-    });
-  }
-
-  /**
-   * Delete resource
-   */
-  delete(req, res) {
-
   }
 
   /**
@@ -137,53 +76,53 @@ class UsersController extends CrudRestController {
    * @param {request} req
    * @param {response} res
    */
-  getClients(req, res) {
-    const repo = new UserRepository();
-    repo.findUserClients(req.params.id, (err, data) => {
-      this._sendResponse(res, err, data);
-    });
+  async getClients(req, res) {
+    try {
+      const data = await this.repository.findUserClients(req.params.id);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
+    }
   }
 
-  getByEmail(req, res) {
-    var fieldToValidate = ["email"];
-    var errorMessage = ValidationData(fieldToValidate, req.params);
-    if (errorMessage != "") {
-      this._error(res, errorMessage);
-      return;
+  async getByEmail(req, res) {
+    try {
+      const data = await this.repository.findOneByEmail(req.params.email);
+      if (!data) return this._notFound(res);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
     }
-    const repo = new UserRepository();
-    repo.findOneByEmail(req.params.email, (err, data) => {
-      this._sendResponse(res, err, data);
-    });
   }
 
-  getByUsername(req, res) {
-    var fieldToValidate = ["username"];
-    var errorMessage = ValidationData(fieldToValidate, req.params);
-    if (errorMessage !== "") {
-      this._error(res, errorMessage);
-      return;
+  /**
+   * Get by name
+   * @param {request} req
+   * @param {response} res
+   */
+  async getByUsername(req, res) {
+    try {
+      const data = await this.repository.findOneByName(req.params.username);
+      if (!data) return this._notFound(res);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
     }
-    const repo = new UserRepository();
-    repo.findOneByName(req.params.username, (err, data) => {
-      this._sendResponse(res, err, data);
-    });
 
   }
 
-  disable(req, res) {
-    var fieldToValidate = ["id"];
-    var errorMessage = ValidationData(fieldToValidate, req.params);
-
-    if (errorMessage != "") {
-      this._error(res, errorMessage);
-      return;
+  /**
+   * Disable
+   * @param {request} req
+   * @param {response} res
+   */
+  async disable(req, res) {
+    try {
+      const data = await this.repository.disable(req.params.id);
+      this._success(res, data);
+    } catch (e) {
+      this._error(res, e);
     }
-    const repo = new UserRepository();
-    repo.disable(req.params.id, (err, data) => {
-      data = { message: "User disabled!" };
-      this._sendResponse(res, err, data);
-    });
   }
 }
 module.exports = UsersController;

@@ -7,100 +7,76 @@ class MongooseRepository {
     if (!model) {
       throw new Error('Mongoose model type cannot be null.');
     }
-    this.collection = model;
+    this.model = model;
   }
-
 
   /**
-   * Finds all instances in the collection.
-   * @param {function} cb - callback
+   * Finds all instances in the model.
    */
-  findAll(cb) {
-    return this.collection.find({ active: true }).exec((err, res) => {
-      cb(err, res);
-    });
+  findAll() {
+    return this.model.find({ active: true }).exec();
   }
-
 
   /**
    * Find an object.
    * @param {string} id - Object Id
-   * @param {function} cb - callback
    */
-  findOne(id, cb) {
-    return this.collection.findOne({
+  findOne(id) {
+    return this.model.findOne({
       _id: id
-    }).lean().exec((err, res) => {
-      cb(err, res);
-    });
+    }).lean().exec();
   }
 
   /**
    * Create an entity.
    * @param {object} entity - Object to create.
-   * @param {function} cb - callback
    */
-  add(entity, cb) {
-    this.collection.create(entity, (err, res) => {
-      cb(err, res);
-    });
+  add(entity) {
+    return this.model.create(entity);
   }
 
   /**
    * Partially update an object.
    * @param {string} id - Object Id
    * @param {object} obj - Key/Value pairs to update
-   * @param {function} cb - callback
    */
-  patch(id, obj, cb) {
-    return this.collection.findOneAndUpdate({
+  patch(id, obj) {
+    return this.model.findOneAndUpdate({
       _id: id
     }, {
         $set: obj
       }, {
         new: true,
         lean: true
-      },
-      (err, res) => {
-        cb(err, res);
       });
   }
 
   /**
    * Update an entity.
    * @param {object} entity - Object to update.
-   * @param {function} cb - callback
    */
-  update(entity, cb) {
-    return this.collection.findByIdAndUpdate(entity._id, entity, {
+  update(entity) {
+    return this.model.findByIdAndUpdate(entity._id, entity, {
       new: true,
       passRawResult: true,
       lean: true
-    }).exec((err, res) => {
-      cb(err, res);
-    });
+    }).exec();
   }
 
   /**
    * Delete an entity.
    * @param {string} id - Entity Id
-   * @param {function} cb - callback
    */
-  remove(id, cb) {
-    return this.collection.findByIdAndRemove(id, (err, res) => {
-      cb(err, res);
-    });
+  remove(id) {
+    return this.model.findByIdAndRemove(id);
   }
 
   /**
    * Disable an entity.
    * @param {string} id - Entity Id
-   * @param {function} cb - callback
    */
-  disable(id, cb) {
-    return this.collection.findByIdAndUpdate(id, { active: false }).exec((err, res) => {
-      cb(err, res);
-    });
+  disable(id) {
+    return this.model.findByIdAndUpdate(id, { active: false }).exec();
   }
 }
 

@@ -1,4 +1,5 @@
 const express = require('express');
+const ValidationData = require('../helper/validationIncomingData');
 
 /**
  * Base Controller
@@ -28,6 +29,7 @@ class BaseRestController {
   _notFound(res) {
     res.status(404).json({
       status: 404,
+      message: 'Not found'
     }).end();
   }
 
@@ -49,7 +51,6 @@ class BaseRestController {
   _success(res, data) {
     res.status(200).json({
       status: 200,
-      errorInfo: "",
       data: data ? data : {}
     }).end();
   }
@@ -64,6 +65,15 @@ class BaseRestController {
       return
     }
     this._success(res, data);
+  }
+
+  _hasRequiredParams(res, params, data) {
+    var errorMessage = ValidationData(params, data);
+    if (errorMessage !== '') {
+      this._error(res, errorMessage);
+      return false;
+    }
+    return true;
   }
 
 }
