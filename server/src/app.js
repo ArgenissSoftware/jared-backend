@@ -44,6 +44,7 @@ server.use(jwt({ secret: process.env.JWT_SECRET}).unless({
   path: [
     { url: '/', methods: ['GET']},
     { url: '/api/auth/login', methods: ['POST']},
+    { url: '/api/auth/register', methods: ['POST']},
     { url: '/api/users', methods: ['POST', 'GET']},
     { url: '/api/users/forgot_password', methods: ['POST']},
     { url: '/api/users/reset_password', methods: ['GET']}

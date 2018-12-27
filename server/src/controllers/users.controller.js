@@ -29,49 +29,6 @@ class UsersController extends CrudRestController {
   }
 
   /**
-   * Create resource
-   */
-  async create(req, res) {
-    var validation = this.repository.model.validateUpdate(req.body);
-    if (validation.error) {
-      // validation error
-      this._error(res, validation.error.details, 422);
-      return;
-    }
-
-    const rolesRepository = new RoleRepository();
-    let userRole;
-
-    try {
-      if (req.body.role) {
-        userRole = await rolesRepository.findOne({_id: req.body.role});
-        if (!userRole) {
-          this._error(res, "Role doesn't exists.")
-          return
-        }
-      } else {
-        userRole = await rolesRepository.findOrCreate('Developer');
-      }
-
-      req.body.role = userRole._id;
-      req.body.password = PasswordHasher.hashPassword(req.body.password);
-
-      const user = await this.repository.add(req.body);
-
-      const token = PasswordHasher.generateToken(user);
-      const data = {
-        message: "User created!",
-        token: token,
-        user: user
-      };
-      this._success(res, data);
-    } catch (e) {
-      console.error(e);
-      this._error(res, e);
-    }
-  }
-
-  /**
    * Get user clients
    * @param {request} req
    * @param {response} res

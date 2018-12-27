@@ -3,6 +3,7 @@ const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
 const PasswordHasher = require('../helper/passwordHasher');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../repositories/user.repository');
+const RolesRepository = require('../repositories/role.repository');
 
 /**
  * Auth controller
@@ -25,6 +26,7 @@ class AuthController extends BaseRestController {
   registerRoutes() {
     this.router.post("/login", this.login.bind(this));
     this.router.get("/refreshToken", this.refreshToken.bind(this));
+    this.router.post("/register", this.register.bind(this));
   }
 
   /**
@@ -66,6 +68,51 @@ class AuthController extends BaseRestController {
     const data = { message: "Login correct!", token: token, user: user };
     this._success(res, data);
   };
+
+  /**
+   * Create resource
+   */
+  async register(req, res) {
+    console.log("En el backend dentro del register");
+    
+    var validation = this.repository.model.validateUpdate(req.body);
+    if (validation.error) {
+      // validation error
+      this._error(res, validation.error.details, 422);
+      return;
+    }
+
+    const rolesRepository = new RolesRepository();
+    let userRole;
+
+    try {
+      if (req.body.role) {
+        userRole = await rolesRepository.findOne({_id: req.body.role});
+        if (!userRole) {
+          this._error(res, "Role doesn't exists.")
+          return
+        }
+      } else {
+        userRole = await rolesRepository.findOrCreate('Developer');
+      }
+
+      req.body.role = userRole._id;
+      req.body.password = PasswordHasher.hashPassword(req.body.password);
+
+      const user = await this.repository.add(req.body);
+
+      const token = PasswordHasher.generateToken(user);
+      const data = {
+        message: "User created!",
+        token: token,
+        user: user
+      };
+      this._success(res, data);
+    } catch (e) {
+      console.error(e);
+      this._error(res, e);
+    }
+  }
 
   /**
    * Refresh auth token
