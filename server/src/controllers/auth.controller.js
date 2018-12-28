@@ -73,8 +73,6 @@ class AuthController extends BaseRestController {
    * Create resource
    */
   async register(req, res) {
-    console.log("En el backend dentro del register");
-    
     var validation = this.repository.model.validateUpdate(req.body);
     if (validation.error) {
       // validation error
