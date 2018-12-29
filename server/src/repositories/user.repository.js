@@ -9,8 +9,12 @@ class UsersRepository extends MongooseRepository {
   /**
    * Finds all instances in the model.
    */
-  findAll() {
-    return this.model.find({ active: true }, '-password').exec();
+  findAll(pageNum, batchSize) {
+    let query = {};
+    const skip = pageNum ? batchSize * (pageNum - 1) : 0;
+    query.skip = skip;
+    query.limit = pageNum ? batchSize : 0;
+    return this.model.find({ active: true }, '-password', query).exec();
   }
 
   /**
