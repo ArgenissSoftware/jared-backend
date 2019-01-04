@@ -14,6 +14,8 @@ class CrudRestController extends BaseRestController {
   constructor(basePath, parentRouter, repository) {
     super(basePath, parentRouter);
     this.repository = repository;
+    // TODO: to decide how to handle this value (global value or for each controller? static or dynamic? refactor)
+    this.batchSize = 1;
   }
 
   /**
@@ -21,6 +23,7 @@ class CrudRestController extends BaseRestController {
    */
   registerRoutes() {
     this.router.get('/', this.list.bind(this));
+    this.router.get('/page/:pageNum', this.list.bind(this));
     this.router.post('/', this.create.bind(this));
     this.router.get('/:id', this.get.bind(this));
     this.router.put('/:id', this.update.bind(this));
@@ -32,7 +35,8 @@ class CrudRestController extends BaseRestController {
    */
   async list(req, res) {
     try {
-      const data = await this.repository.findAll();
+      const pageNum = req.params.pageNum;
+      const data = await this.repository.findAll(pageNum, this.batchSize);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);
