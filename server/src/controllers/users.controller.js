@@ -22,6 +22,7 @@ class UsersController extends CrudRestController {
    */
   registerRoutes() {
     this.router.get('/:id/clients', this.getClients.bind(this));
+    this.router.get('/:id/clients/page/:pageNum', this.getClients.bind(this));
     this.router.get("/username/:username", this.getByUsername.bind(this));
     this.router.get("/email/:email", this.getByEmail.bind(this));
     this.router.put("/disable/:id", this.disable.bind(this));
@@ -78,7 +79,8 @@ class UsersController extends CrudRestController {
    */
   async getClients(req, res) {
     try {
-      const data = await this.repository.findUserClients(req.params.id);
+      const pageNum = req.params.pageNum;
+      const data = await this.repository.findUserClients(req.params.id, pageNum, this.batchSize);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);

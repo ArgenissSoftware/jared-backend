@@ -20,8 +20,13 @@ class UsersRepository extends MongooseRepository {
   /**
    * Find user's clients.
    */
-  findUserClients(id) {
-    return this.model.findById(id, 'clients').populate('clients').lean().exec();
+  findUserClients(id, pageNum, batchSize) {
+    let query = {};
+    const skip = pageNum ? batchSize * (pageNum - 1) : 0;
+    query.skip = skip;
+    query.limit = pageNum ? batchSize : 0;
+    console.log('>>> limit: ' + JSON.stringify(query));
+    return this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
   }
 
   /**
