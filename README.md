@@ -99,46 +99,63 @@ Jared API Endpoints:
 * GET https://jared-backend.herokuapp.com/api/users/username/cuti
     ```javascript
     {
-  "status": 200,
-  "errorInfo": "",
-  "data": {
-      "_id": "5a8436b7a1af260010767191",
-      "email": "cuti@mail.com",
-      "username": "cuti",
-      "active": true,
-      "__v": 0,
-      "clients": [],
-      "relation": "hired"
-  }
-}
+      "status": 200,
+      "errorInfo": "",
+      "data": {
+          "_id": "5a8436b7a1af260010767191",
+          "email": "cuti@mail.com",
+          "username": "cuti",
+          "active": true,
+          "__v": 0,
+          "clients": [],
+          "relation": "hired"
+      }
+    }
     ```
 * GET https://jared-backend.herokuapp.com/api/users
-        ```javascript
-        {
+    ```javascript
+    {
     "status": 200,
-    "errorInfo": "",
-    "data": [
-        {
-            "_id": "5a68b6516dc9920010b16229",
-            "email": "alexis@test.com2",
-            "username": "alexisrcausa2",
-            "active": true,
-            "__v": 0,
-            "clients": [],
-            "relation": "hired"
-        },
-        {
-            "_id": "5a8436b7a1af260010767191",
-            "email": "cuti@mail.com",
-            "username": "cuti",
-            "active": true,
-            "__v": 0,
-            "clients": [],
-            "relation": "hired"
-        }
-    ]
-}
-        ```
+     "errorInfo": "",
+     "data": [
+         {
+             "_id": "5a68b6516dc9920010b16229",
+             "email": "alexis@test.com2",
+             "username": "alexisrcausa2",
+             "active": true,
+             "__v": 0,
+             "clients": [],
+             "relation": "hired"
+         },
+         {
+             "_id": "5a8436b7a1af260010767191",
+             "email": "cuti@mail.com",
+             "username": "cuti",
+             "active": true,
+             "__v": 0,
+             "clients": [],
+             "relation": "hired"
+         }
+     ]
+    }
+    ```
+* GET https://jared-backend.herokuapp.com/api/users/page/2
+    ```javascript
+    {
+        "status": 200,
+        "data": [
+            {
+               "_id": "5a8436b7a1af260010767191",
+               "email": "cuti@mail.com",
+               "username": "cuti",
+               "active": true,
+               "__v": 0,
+               "clients": [],
+               "relation": "hired"
+             }
+        ]
+    }
+    ```
 * DELETE https://jared-backend.herokuapp.com/api/users/disable/5a8436b7a1af260010767191
 ```javascript
 req =  {
