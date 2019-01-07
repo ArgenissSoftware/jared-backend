@@ -28,7 +28,7 @@ const clientValidation = Joi.object().keys({
     address: Joi.string().min(3).max(50),
     url: url,
     active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
-    employees: Joi.array().unique((a, b) => a.id === b.id)
+    employees: Joi.array().unique((a, b) => a.id !== b.id)
 });
 
 /**
