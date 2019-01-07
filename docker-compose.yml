@@ -22,8 +22,8 @@ services:
       - MONGO_LOG_DIR=/dev/null
     networks:
       - backend
-    volumes:
-      - ./data:/data/db
+    # volumes:
+    #   - ./data:/data/db
     command: mongod --smallfiles --logpath=/dev/null --dbpath=/data/db # --quiet
 
 networks:
