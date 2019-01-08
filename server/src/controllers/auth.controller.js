@@ -25,6 +25,50 @@ class AuthController extends BaseRestController {
   registerRoutes() {
     this.router.post("/login", this.login.bind(this));
     this.router.get("/refreshToken", this.refreshToken.bind(this));
+    this.router.post("/register", this.register.bind(this));
+  }
+
+  /**
+   * register
+   */
+  async register(req, res) {
+    var validation = this.repository.model.validateUpdate(req.body);
+    if (validation.error) {
+      // validation error
+      this._error(res, validation.error.details, 422);
+      return;
+    }
+
+    const rolesRepository = new RolesRepository();
+    let userRole;
+
+    try {
+      if (req.body.role) {
+        userRole = await rolesRepository.findOne({_id: req.body.role});
+        if (!userRole) {
+          this._error(res, "Role doesn't exists.")
+          return
+        }
+      } else {
+        userRole = await rolesRepository.findOrCreate('Developer');
+      }
+
+      req.body.role = userRole._id;
+      req.body.password = PasswordHasher.hashPassword(req.body.password);
+
+      const user = await this.repository.add(req.body);
+
+      const token = PasswordHasher.generateToken(user);
+      const data = {
+        message: "User created!",
+        token: token,
+        user: user
+      };
+      this._success(res, data);
+    } catch (e) {
+      console.error(e);
+      this._error(res, e);
+    }
   }
 
   /**

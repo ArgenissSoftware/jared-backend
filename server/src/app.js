@@ -25,7 +25,6 @@ server.use(cors({credentials: true, origin: true}))
 // Routes
 var routes = require('./routes/routes.config');
 
-
 server.set('port', (process.env.PORT || 3000));
 
 // format call body
@@ -44,6 +43,7 @@ server.use(jwt({ secret: process.env.JWT_SECRET}).unless({
   path: [
     { url: '/', methods: ['GET']},
     { url: '/api/auth/login', methods: ['POST']},
+    { url: '/api/auth/register', methods: ['POST']},
     { url: '/api/users', methods: ['POST', 'GET']},
     { url: '/api/users/forgot_password', methods: ['POST']},
     { url: '/api/users/reset_password', methods: ['GET']}
@@ -60,9 +60,15 @@ server.use("/api", routes);
 // Adding swagger.
 server.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-//expose templates and images as public
+// expose templates and images as public
 server.use(express.static(__dirname + '/public'));
 
+// global error handling
+server.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({status: 401, error: 'invalid token...'});
+  }
+});
 
 
 server.listen(server.get('port'), function() {

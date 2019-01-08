@@ -58,10 +58,8 @@ class UsersController extends CrudRestController {
 
       const user = await this.repository.add(req.body);
 
-      const token = PasswordHasher.generateToken(user);
       const data = {
         message: "User created!",
-        token: token,
         user: user
       };
       this._success(res, data);
