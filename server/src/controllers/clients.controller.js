@@ -86,7 +86,6 @@ class ClientsController extends CrudRestController {
    * Delete a client from a developer
    */
   async deleteClient(clientId, userId, res) {
-    console.log("Borrando el cliente del developer");
     
     UserModel.findByIdAndUpdate(
       userId, {
