@@ -2,6 +2,7 @@ const CrudRestController = require('./crud-rest.controller');
 const ValidationData = require('../helper/validationIncomingData');
 const ClientRepository = require('../repositories/client.repository');
 const UserModel = require('../models/user.model');
+const ClientModel = require('../models/client.model');
 
 /**
  * Clients controllers
@@ -59,54 +60,96 @@ class ClientsController extends CrudRestController {
   }
 
    /**
-   * Delete a developer
+   * Delete a developer from a client
    * @param {request} req
    * @param {response} res
    */
   async deleteDeveloper(req, res) {
-    console.log("En el deleteDeveloper");
-    UserModel.findByIdAndUpdate(req.params.devid, {
-      $pull: {
-        clients: req.params.id
-      }}, {
-        new: true
+    ClientModel.findByIdAndUpdate(
+      req.params.id, {
+        $pull: {
+          employees: req.params.devid
+        }
+      }, {
+      new: true
       }, 
-      function(error, data) {
+      (error, data) => {
       if(error) {
-      // this._error(res, error);
-      console.log(error);
+        this._error(res, error);
+      } else {
+        this.deleteClient(req.params.id, req.params.devid, res);
       }
-      console.log("Resultado: "+data);
-
-        // this._success(res, data);
-      
     });
   }
 
    /**
-   * Assign a developer
-   * @param {request} req
-   * @param {response} res
+   * Delete a client from a developer
    */
-  async assignDeveloper(req, res) {
-    console.log("En el assingDeveloper");
-    UserModel.findByIdAndUpdate(req.params.devid, {
-      $push: {
-        clients: req.params.id
-      }}, {
+  async deleteClient(clientId, userId, res) {
+    console.log("Borrando el cliente del developer");
+    
+    UserModel.findByIdAndUpdate(
+      userId, {
+        $pull: {
+          clients: clientId
+        }
+      }, {
         new: true
       },
-      function(error, data) {
-      if(error) {
-      // this._error(res, error);
-      console.log(error);
-      
-      }
-      console.log("Resultado: "+data);
+      (error, data) => {
+        if (error) {
+          this._error(res, error);
+        } else {
+          this._success(res, data);
+        }
+      });
+  }
 
+/**
+  * Assign a developer to a client
+  * @param {request} req
+  * @param {response} res
+  */
+ async assignDeveloper(req, res) {
+    ClientModel.findByIdAndUpdate(
+      req.params.id, {
+        $push: {
+          employees: req.params.devid
+        }
+      }, {
+        new: true
+      },
+      (error, data) => {
+      if (error) {
+        this._error(res, error);
+      } else {
+        this.assignClient(req.params.id, req.params.devid, res);
+      }
     });
   }
 
+   /**
+   * Assing a client to a developer
+   * @param {request} req
+   * @param {response} res
+   */
+  async assignClient(clientId, userId, res) {
+    UserModel.findByIdAndUpdate(
+      userId, {
+        $push: {
+          clients: clientId
+        }
+      }, {
+        new: true
+      },
+      (error, data) => {
+        if (error) {
+          this._error(res, error);
+        } else {
+          this._success(res, data);
+        }
+      });
+  }
 }
 
 module.exports = ClientsController;
