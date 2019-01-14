@@ -177,9 +177,7 @@ class UsersController extends CrudRestController {
   * @param {request} req
   * @param {response} res
   */
-  async assignClient(req, res) {
-    console.log("Asignando cliente a desarrollador");
-    
+  async assignClient(req, res) {    
     UserModel.findByIdAndUpdate(
       req.params.id, {
         $push: {
@@ -200,9 +198,7 @@ class UsersController extends CrudRestController {
   /**
    * Assign a developer to a client
    */
-  async assignDeveloper(userId, clientId, res) {
-    console.log("Asignando desarrollador a cliente");
-    
+  async assignDeveloper(userId, clientId, res) {    
     ClientModel.findByIdAndUpdate(
       clientId, {
         $push: {
