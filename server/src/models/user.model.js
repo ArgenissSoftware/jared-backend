@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 const Joi = require('joi');
 
 const argenissEmail = Joi.string().regex(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(argeniss)\.com$/);
-const numbers = /^([^0-9]*)$/;
+const notNumbers = /^([^0-9]*)$/;
+const onlyNumbers = /^[0-9]*$/;
 
 /**
  * Schema
@@ -59,9 +60,9 @@ const userValidation = Joi.object().keys({
   password: Joi.string().min(6).max(8),
   active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
   admin: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
-  name: Joi.string().min(2).max(50).regex(numbers).required(),
-  surname: Joi.string().min(2).max(50).regex(numbers).required(),
-  cuil: Joi.number().min(11).max(11),
+  name: Joi.string().min(2).max(50).regex(notNumbers).required(),
+  surname: Joi.string().min(2).max(50).regex(notNumbers).required(),
+  cuil: Joi.string().length(11).regex(onlyNumbers),
   passport: Joi.string().min(2).max(50),
   visa: Joi.date().max('now').min(Joi.ref('birthday')),
   address: Joi.string().min(3).max(50),
@@ -73,7 +74,7 @@ const userValidation = Joi.object().keys({
   career: Joi.string().min(3).max(50),
   status: Joi.string().min(3).max(50),
   startWorkDate: Joi.date().max('now').min(Joi.ref('birthday')),
-  alarmCode: Joi.number().min(3).max(50),
+  alarmCode: Joi.string().min(3).max(50).regex(onlyNumbers),
   githubID: Joi.string().min(3).max(50),
   relation: Joi.any().valid(['freelance', 'hired']),
   clients: Joi.array().unique((a, b) => a.id === b.id),
