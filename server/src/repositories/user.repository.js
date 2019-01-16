@@ -11,8 +11,8 @@ class UsersRepository extends MongooseRepository {
    * @param {number} pageNum - amount of records to skip
    * @param {number} batchSize - amount of records to return
    */
-  findAll(pageNum, batchSize) {
-    const query = super.paginationQueryOptions(pageNum, batchSize);
+  findAll(pageNum, pageSize) {
+    const query = super.paginationQueryOptions(pageNum, pageSize);
     return super.findAll('-password', query);
   }
 

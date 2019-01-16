@@ -15,7 +15,7 @@ class CrudRestController extends BaseRestController {
     super(basePath, parentRouter);
     this.repository = repository;
     // TODO: to decide how to handle this value (global value or for each controller? static or dynamic? refactor)
-    this.batchSize = 1;
+    this.pageSize = 2;
   }
 
   /**
@@ -36,10 +36,12 @@ class CrudRestController extends BaseRestController {
   async list(req, res) {
     try {
       const pageNum = req.params.pageNum;
-      const data = await this.repository.findAll(pageNum, this.batchSize);
+      const data = await this.repository.findAll(pageNum, this.pageSize);
+      console.log(data);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);
+      console.log(e);
     }
   }
 
