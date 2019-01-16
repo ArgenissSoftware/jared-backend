@@ -8,20 +8,23 @@ class UsersRepository extends MongooseRepository {
 
   /**
    * Finds all instances in the model.
+   * @param {number} pageNum - amount of records to skip
+   * @param {number} batchSize - amount of records to return
    */
   findAll(pageNum, batchSize) {
-    let query = {};
-    const skip = pageNum ? batchSize * (pageNum - 1) : 0;
-    query.skip = skip;
-    query.limit = pageNum ? batchSize : 0;
-    return this.model.find({ active: true }, '-password', query).exec();
+    const query = super.paginationQueryOptions(pageNum, batchSize);
+    return super.findAll('-password', query);
   }
 
   /**
    * Find user's clients.
+   * @param {string} id - User Id
+   * @param {number} pageNum - amount of records to skip
+   * @param {number} batchSize - amount of records to return
    */
-  findUserClients(id) {
-    return this.model.findById(id, 'clients').populate('clients').lean().exec();
+  findUserClients(id, pageNum, batchSize) {
+    const query = super.paginationQueryOptions(pageNum, batchSize);
+    return this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
   }
 
   /**

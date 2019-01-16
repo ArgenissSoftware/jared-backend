@@ -11,10 +11,12 @@ class MongooseRepository {
   }
 
   /**
-   * Finds all instances in the model.
+   * Finds all instances in the model, with pagination.
+   * @param {string} fields - specific fields to be included/excluded 
+   * @param {object} query - options to append to Mongoose's query
    */
-  findAll() {
-    return this.model.find({ active: true }).exec();
+  findAll(fields, query) {
+    return this.model.find({ active: true }, fields, query).exec();
   }
 
   /**
@@ -78,6 +80,35 @@ class MongooseRepository {
   disable(id) {
     return this.model.findByIdAndUpdate(id, { active: false }).exec();
   }
+  
+  /**
+   * find all the object with string 'search' mateched in the fields 'fieldsSearch'
+   * @param {string} search - Object Id
+   * @param {object} fieldsSearch - Key/Value pairs to update
+   */
+  findAllByField(search, fieldsSearch) {
+    let arrayQuery = []
+    fieldsSearch.forEach(e => {
+      let query = {};
+      query[e] = new RegExp(search);                                      //borrar!!!!!!!
+      arrayQuery.push(query);
+    });
+    return this.model.find({ $or: arrayQuery }).exec();
+  }
+
+  /**
+   * Create pagination query.
+   * @param {number} pageNum - amount of records to skip
+   * @param {number} batchSize - amount of records to return
+   */
+  paginationQueryOptions(pageNum, batchSize) {
+    let query = {};
+    // if pageNum is null or batchSize == 0, then return ALL records
+    query.skip = (pageNum && batchSize > 0) ? batchSize * (pageNum - 1) : 0;
+    query.limit = (pageNum && batchSize > 0) ? batchSize : 0;
+    return query;
+  }
+
 }
 
 module.exports = MongooseRepository;

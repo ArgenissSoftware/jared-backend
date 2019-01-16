@@ -24,11 +24,13 @@ class UsersController extends CrudRestController {
    */
   registerRoutes() {
     this.router.get('/:id/clients', this.getClients.bind(this));
+    this.router.get('/:id/clients/page/:pageNum', this.getClients.bind(this));
     this.router.get("/username/:username", this.getByUsername.bind(this));
     this.router.get("/email/:email", this.getByEmail.bind(this));
     this.router.put("/disable/:id", this.disable.bind(this));
     this.router.delete("/:id/assign/client/:clientid", this.deleteClient.bind(this));
     this.router.post("/:id/assign/client/:clientid", this.assignClient.bind(this));
+    this.router.get("/search", this.getSearch.bind(this));
     super.registerRoutes();
   }
 
@@ -80,7 +82,9 @@ class UsersController extends CrudRestController {
    */
   async getClients(req, res) {
     try {
-      const data = await this.repository.findUserClients(req.params.id);
+      const pageNum = req.params.pageNum;
+      const id = req.params.id;
+      const data = await this.repository.findUserClients(id, pageNum, this.batchSize);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);
@@ -217,5 +221,21 @@ class UsersController extends CrudRestController {
   }
 
 
+    /**
+   * Get by search 
+   * @param {request} req
+   * @param {response} res
+   */
+  async getSearch(req, res) {
+    try {
+      if (req.body){
+        const data = await this.repository.findAllByField(req.body.search, req.body.fieldssearch)
+        if (!data) return this._notFound(res);
+        this._success(res, data);
+      }
+    } catch (e) {
+      this._error(e);
+    }
+  }
 }
 module.exports = UsersController;
