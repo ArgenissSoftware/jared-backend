@@ -38,6 +38,7 @@ class BaseRestController {
    * @param {response} res
    */
   _error(res, error, code = 400) {
+    console.log(error);
     res.status(code).json({
       status: code,
       errors: error,
