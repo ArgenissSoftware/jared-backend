@@ -80,7 +80,7 @@ class UsersController extends CrudRestController {
     try {
       const pageNum = req.params.pageNum;
       const id = req.params.id;
-      const data = await this.repository.findUserClients(id, pageNum, this.batchSize);
+      const data = await this.repository.findUserClients(id, pageNum, this.pageSize);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);

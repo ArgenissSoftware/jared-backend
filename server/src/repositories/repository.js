@@ -18,13 +18,12 @@ class MongooseRepository {
   async findAll(fields, query) {
     const data = []; 
     const res = await this.model.find({ active: true }, fields, query).exec();
-    const count = await this.model.countDocuments({}, (err, count) => {
+    const count = await this.model.countDocuments({ active: true }, (err, count) => {
       if(err) {
         console.log(err);
       }
     });
-    data.push(res , count);
-    console.log(data);
+    data.push({ data: res, count: count });
   
     return data;
   }
@@ -113,7 +112,7 @@ class MongooseRepository {
    */
   paginationQueryOptions(pageNum, pageSize) {
     let query = {};
-    // if pageNum is null or batchSize == 0, then return ALL records
+    // if pageNum is null or pageSize == 0, then return ALL records
     query.skip = (pageNum && pageSize > 0) ? pageSize * (pageNum - 1) : 0;
     query.limit = (pageNum && pageSize > 0) ? pageSize : 0;    
     return query;

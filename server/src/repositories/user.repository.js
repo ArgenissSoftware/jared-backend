@@ -20,10 +20,10 @@ class UsersRepository extends MongooseRepository {
    * Find user's clients.
    * @param {string} id - User Id
    * @param {number} pageNum - amount of records to skip
-   * @param {number} batchSize - amount of records to return
+   * @param {number} pageSize - amount of records to return
    */
-  findUserClients(id, pageNum, batchSize) {
-    const query = super.paginationQueryOptions(pageNum, batchSize);
+  findUserClients(id, pageNum, pageSize) {
+    const query = super.paginationQueryOptions(pageNum, pageSize);
     return this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
   }
 
@@ -57,6 +57,16 @@ class UsersRepository extends MongooseRepository {
       { email: email },
       { reset_password_token: token, reset_password_expires: dateExpire }
     ).exec();
+  }
+
+  /**
+   * Find an user with his clients.
+   * @param {string} id - Object Id
+   */
+  findOne(id) {    
+    return this.model.findOne({
+      _id: id
+    }).populate('clients').lean().exec();
   }
 }
 

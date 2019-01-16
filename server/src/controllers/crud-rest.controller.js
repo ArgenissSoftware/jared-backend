@@ -37,7 +37,6 @@ class CrudRestController extends BaseRestController {
     try {
       const pageNum = req.params.pageNum;
       const data = await this.repository.findAll(pageNum, this.pageSize);
-      console.log(data);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);
