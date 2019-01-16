@@ -80,6 +80,21 @@ class MongooseRepository {
   disable(id) {
     return this.model.findByIdAndUpdate(id, { active: false }).exec();
   }
+  
+  /**
+   * find all the object with string 'search' mateched in the fields 'fieldsSearch'
+   * @param {string} search - Object Id
+   * @param {object} fieldsSearch - Key/Value pairs to update
+   */
+  findAllByField(search, fieldsSearch) {
+    let arrayQuery = []
+    fieldsSearch.forEach(e => {
+      let query = {};
+      query[e] = new RegExp(search);                                      //borrar!!!!!!!
+      arrayQuery.push(query);
+    });
+    return this.model.find({ $or: arrayQuery }).exec();
+  }
 
   /**
    * Create pagination query.
@@ -93,6 +108,7 @@ class MongooseRepository {
     query.limit = (pageNum && batchSize > 0) ? batchSize : 0;
     return query;
   }
+
 }
 
 module.exports = MongooseRepository;
