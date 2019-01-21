@@ -74,7 +74,7 @@ class CrudRestController extends BaseRestController {
   }
 
   /**
-   * Get resource
+   * Update resource
    */
   async update(req, res) {
     delete req.body.__v;

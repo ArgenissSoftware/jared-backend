@@ -58,6 +58,16 @@ class UsersRepository extends MongooseRepository {
       { reset_password_token: token, reset_password_expires: dateExpire }
     ).exec();
   }
+
+ /**
+   * Find an user with his clients.
+   * @param {string} id - Object Id
+   */
+  findOne(id) {    
+    return this.model.findOne({
+      _id: id
+    }).populate('clients').lean().exec();
+  }
 }
 
 module.exports = UsersRepository;
