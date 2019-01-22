@@ -13,7 +13,7 @@ class ClientsRepository extends MongooseRepository {
    */
   findAll(pageNum, batchSize) {
     const query = super.paginationQueryOptions(pageNum, batchSize);
-    return super.findAll('*', query);
+    return super.findAll('', query);
   }
 
   /**
@@ -27,7 +27,7 @@ class ClientsRepository extends MongooseRepository {
    * Find an client with his employees.
    * @param {string} id - Object Id
    */
-  findOne(id) {    
+  findOne(id) {
     return this.model.findOne({
       _id: id
     }).populate('employees').lean().exec();
