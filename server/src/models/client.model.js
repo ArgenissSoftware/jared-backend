@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 const url = Joi.string().regex(/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i);
 const commonEmail = Joi.string().email({ minDomainAtoms: 2 });
-const numbers = /^([^0-9]*)$/;
+const notNumbers = /^([^0-9]*)$/;
 
 const clientModel = mongoose.Schema({
     name: String,
@@ -23,7 +23,7 @@ const clientValidation = Joi.object().keys({
     id: Joi.string(),
     _id: Joi.string(),
     __v: Joi.any(),
-    name: Joi.string().min(3).max(100).regex(numbers).required(),
+    name: Joi.string().min(3).max(100).regex(notNumbers).required(),
     contactName: Joi.string().min(3).max(50),
     email: commonEmail,
     address: Joi.string().min(3).max(50),

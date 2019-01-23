@@ -4,26 +4,36 @@ const UserModel = require('../models/user.model');
 class UsersRepository extends MongooseRepository {
   constructor() {
     super(UserModel);
+    this.fieldsSearch = ["name", "email"];
   }
 
-  /**
+    /**
    * Finds all instances in the model.
    * @param {number} pageNum - amount of records to skip
-   * @param {number} batchSize - amount of records to return
+   * @param {number} pageSize - amount of records to return
+   * @param {string} search - string to search
    */
-  findAll(pageNum, batchSize) {
-    const query = super.paginationQueryOptions(pageNum, batchSize);
-    return super.findAll('-password', query);
+  async findAll(pageNum, pageSize, search) {
+    const query = super.paginationQueryOptions(pageNum, pageSize);
+    if(search != "undefined") {
+      const data = [];
+      const res =  await super.findAllByField(search, this.fieldsSearch, query);
+      const count = res.length;
+      data.push({ data: res, count: count });
+      return data;
+    } else {
+      return super.findAll('-password', query);
+    }
   }
 
   /**
    * Find user's clients.
    * @param {string} id - User Id
    * @param {number} pageNum - amount of records to skip
-   * @param {number} batchSize - amount of records to return
+   * @param {number} pageSize - amount of records to return
    */
-  findUserClients(id, pageNum, batchSize) {
-    const query = super.paginationQueryOptions(pageNum, batchSize);
+  findUserClients(id, pageNum, pageSize) {
+    const query = super.paginationQueryOptions(pageNum, pageSize);
     return this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
   }
 
@@ -61,11 +71,11 @@ class UsersRepository extends MongooseRepository {
     ).exec();
   }
 
- /**
+  /**
    * Find an user with his clients.
    * @param {string} id - Object Id
    */
-  findOne(id) {
+  findOne(id) {    
     return this.model.findOne({
       _id: id
     }).populate('clients').lean().exec();

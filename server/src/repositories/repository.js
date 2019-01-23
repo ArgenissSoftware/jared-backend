@@ -15,8 +15,17 @@ class MongooseRepository {
    * @param {string} fields - specific fields to be included/excluded 
    * @param {object} query - options to append to Mongoose's query
    */
-  findAll(fields, query) {
-    return this.model.find({ active: true }, fields, query).exec();
+  async findAll(fields, query) {
+    const data = []; 
+    const res = await this.model.find({ active: true }, fields, query).exec();
+    const count = await this.model.countDocuments({ active: true }, (err, count) => {
+      if(err) {
+        console.log(err);
+      }
+    });
+    data.push({ data: res, count: count });
+  
+    return data;
   }
 
   /**
@@ -90,22 +99,22 @@ class MongooseRepository {
     let arrayQuery = []
     fieldsSearch.forEach(e => {
       let query = {};
-      query[e] = new RegExp(search);                                      //borrar!!!!!!!
+      query[e] = new RegExp(search);
       arrayQuery.push(query);
-    });
-    return this.model.find({ $or: arrayQuery }).exec();
+    });    
+    return this.model.find({ $or: arrayQuery}).exec();
   }
 
   /**
    * Create pagination query.
    * @param {number} pageNum - amount of records to skip
-   * @param {number} batchSize - amount of records to return
+   * @param {number} pageSize - amount of records to return
    */
-  paginationQueryOptions(pageNum, batchSize) {
+  paginationQueryOptions(pageNum, pageSize) {
     let query = {};
-    // if pageNum is null or batchSize == 0, then return ALL records
-    query.skip = (pageNum && batchSize > 0) ? batchSize * (pageNum - 1) : 0;
-    query.limit = (pageNum && batchSize > 0) ? batchSize : 0;
+    // if pageNum is null or pageSize == 0, then return ALL records
+    query.skip = (pageNum && pageSize > 0) ? pageSize * (pageNum - 1) : 0;
+    query.limit = parseInt(((pageNum && pageSize > 0) ? pageSize : 0), 10);    
     return query;
   }
 
