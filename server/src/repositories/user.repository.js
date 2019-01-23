@@ -4,16 +4,26 @@ const UserModel = require('../models/user.model');
 class UsersRepository extends MongooseRepository {
   constructor() {
     super(UserModel);
+    this.fieldsSearch = ["name", "email"];
   }
 
-  /**
+    /**
    * Finds all instances in the model.
    * @param {number} pageNum - amount of records to skip
-   * @param {number} batchSize - amount of records to return
+   * @param {number} pageSize - amount of records to return
+   * @param {string} search - string to search
    */
-  findAll(pageNum, pageSize) {
+  async findAll(pageNum, pageSize, search) {
     const query = super.paginationQueryOptions(pageNum, pageSize);
-    return super.findAll('-password', query);
+    if(search != "undefined") {
+      const data = [];
+      const res =  await super.findAllByField(search, this.fieldsSearch, query);
+      const count = res.length;
+      data.push({ data: res, count: count });
+      return data;
+    } else {
+      return super.findAll('-password', query);
+    }
   }
 
   /**

@@ -99,10 +99,10 @@ class MongooseRepository {
     let arrayQuery = []
     fieldsSearch.forEach(e => {
       let query = {};
-      query[e] = new RegExp(search);                                      //borrar!!!!!!!
+      query[e] = new RegExp(search);
       arrayQuery.push(query);
-    });
-    return this.model.find({ $or: arrayQuery }).exec();
+    });    
+    return this.model.find({ $or: arrayQuery}).exec();
   }
 
   /**
@@ -114,7 +114,7 @@ class MongooseRepository {
     let query = {};
     // if pageNum is null or pageSize == 0, then return ALL records
     query.skip = (pageNum && pageSize > 0) ? pageSize * (pageNum - 1) : 0;
-    query.limit = (pageNum && pageSize > 0) ? pageSize : 0;    
+    query.limit = parseInt(((pageNum && pageSize > 0) ? pageSize : 0), 10);    
     return query;
   }
 
