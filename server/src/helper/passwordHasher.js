@@ -12,9 +12,9 @@ function hashPassword(passwordToHash){
 
 function generateToken(user){
     let u = {
-    	username: user.username,
-    	email: user.email,
-	    admin: user.admin,
+      username: user.username,
+      email: user.email,
+      roles: user.roles.map(r => r.name),
       _id: user._id.toString()
     };
 

@@ -56,7 +56,9 @@ class UsersRepository extends MongooseRepository {
    * used to login
    */
   findOneToLogin(email) {
-    return this.model.find({ $or: [{ email: email }, { username: email }] }).exec();
+    return this.model.findOne({ $or: [{ email: email }, { username: email }] })
+      .populate({ path: 'roles', select: 'name' })
+      .exec();
   }
 
   /**

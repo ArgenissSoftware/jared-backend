@@ -1,11 +1,11 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const url = Joi.string().regex(/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i);
 const commonEmail = Joi.string().email({ minDomainAtoms: 2 });
 const notNumbers = /^([^0-9]*)$/;
 
-var clientModel = mongoose.Schema({
+const clientModel = mongoose.Schema({
     name: String,
     contactName: String,
     email: String,

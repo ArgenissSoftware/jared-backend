@@ -1,5 +1,6 @@
 const express = require('express');
 const ValidationData = require('../helper/validationIncomingData');
+const authorize = require('../core/authorize');
 
 /**
  * Base Controller
@@ -12,10 +13,17 @@ class BaseRestController {
    * @param {parentRouter} parentRouter
    */
   constructor(basePath, parentRouter) {
+    this.authorize = authorize;
     this.router = express.Router();
     parentRouter.use(basePath, this.router);
+    this.registerGuards();
     this.registerRoutes();
   }
+
+  /**
+   * Register authorizations guards
+   */
+  registerGuards() { }
 
   /**
    * Register routes

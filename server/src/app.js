@@ -44,11 +44,12 @@ server.use(jwt({ secret: process.env.JWT_SECRET}).unless({
     { url: '/', methods: ['GET']},
     { url: '/api/auth/login', methods: ['POST']},
     { url: '/api/auth/register', methods: ['POST']},
-    { url: '/api/users', methods: ['POST', 'GET']},
+    // { url: '/api/users', methods: ['POST', 'GET']},
     { url: '/api/users/forgot_password', methods: ['POST']},
     { url: '/api/users/reset_password', methods: ['GET']}
   ]
 }));
+
 // TODO: test url then we will remove it
 server.get('/', (req, res) => {
   res.send('Ping!\n');
