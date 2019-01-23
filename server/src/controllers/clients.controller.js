@@ -19,6 +19,14 @@ class ClientsController extends CrudRestController {
   }
 
   /**
+   * Register authorizations guards
+   */
+  registerGuards() {
+    // only admins can create new clients
+    this.router.post('/', this.authorize('Admin'));
+  }
+
+  /**
    * Register controller routes
    */
   registerRoutes() {
@@ -28,7 +36,7 @@ class ClientsController extends CrudRestController {
     this.router.post("/:id/assign/developer/:devid", this.assignDeveloper.bind(this));
     super.registerRoutes();
   }
- 
+
   /**
    * Disable
    * @param {request} req
@@ -72,7 +80,7 @@ class ClientsController extends CrudRestController {
         }
       }, {
       new: true
-      }, 
+      },
       (error, data) => {
       if(error) {
         this._error(res, error);
@@ -86,7 +94,7 @@ class ClientsController extends CrudRestController {
    * Delete a client from a developer
    */
   async deleteClient(clientId, userId, res) {
-    
+
     UserModel.findByIdAndUpdate(
       userId, {
         $pull: {

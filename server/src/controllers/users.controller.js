@@ -19,6 +19,11 @@ class UsersController extends CrudRestController {
     super(basePath, parentRouter, new UserRepository());
   }
 
+  registerGuards() {
+    // only admins can use all users the endpoints
+    this.router.use(this.authorize('Admin'));
+  }
+
   /**
    * Register controller routes
    */
@@ -165,7 +170,7 @@ class UsersController extends CrudRestController {
         }
       }, {
       new: true
-      }, 
+      },
       (error, data) => {
       if(error) {
         this._error(res, error);
@@ -175,13 +180,13 @@ class UsersController extends CrudRestController {
     });
   }
 
-  
+
   /**
   * Assign a client to a developer
   * @param {request} req
   * @param {response} res
   */
-  async assignClient(req, res) {    
+  async assignClient(req, res) {
     UserModel.findByIdAndUpdate(
       req.params.id, {
         $push: {
@@ -202,7 +207,7 @@ class UsersController extends CrudRestController {
   /**
    * Assign a developer to a client
    */
-  async assignDeveloper(userId, clientId, res) {    
+  async assignDeveloper(userId, clientId, res) {
     ClientModel.findByIdAndUpdate(
       clientId, {
         $push: {
@@ -222,7 +227,7 @@ class UsersController extends CrudRestController {
 
 
     /**
-   * Get by search 
+   * Get by search
    * @param {request} req
    * @param {response} res
    */

@@ -46,7 +46,9 @@ class UsersRepository extends MongooseRepository {
    * used to login
    */
   findOneToLogin(email) {
-    return this.model.find({ $or: [{ email: email }, { username: email }] }).exec();
+    return this.model.findOne({ $or: [{ email: email }, { username: email }] })
+      .populate({ path: 'roles', select: 'name' })
+      .exec();
   }
 
   /**
@@ -63,7 +65,7 @@ class UsersRepository extends MongooseRepository {
    * Find an user with his clients.
    * @param {string} id - Object Id
    */
-  findOne(id) {    
+  findOne(id) {
     return this.model.findOne({
       _id: id
     }).populate('clients').lean().exec();

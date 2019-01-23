@@ -83,12 +83,7 @@ class AuthController extends BaseRestController {
     }
 
     // check if user exist
-    const result = await this.repository.findOneToLogin(req.body.email);
-    let user = null
-
-    if (result.length > 0) {
-      user = result[0]
-    }
+    const user = await this.repository.findOneToLogin(req.body.email);
 
     if (!user) {
       this._error(res, "Failed to login. User doesn't exist!")

@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const argenissEmail = Joi.string().regex(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(argeniss)\.com$/);
@@ -8,12 +8,11 @@ const onlyNumbers = /^[0-9]*$/;
 /**
  * Schema
  */
-var userModel = mongoose.Schema({
+const userModel = mongoose.Schema({
     username: String,
     email: String,
     password: String,
     active: { type:  Boolean , default: true },
-    admin: Boolean,
     //employee data
     name: String,
     surname: String,
@@ -42,10 +41,10 @@ var userModel = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'ClientModel'
     }],
-    role: {
+    roles: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'RoleModel'
-    },
+    }],
 });
 
 /**
@@ -59,7 +58,6 @@ const userValidation = Joi.object().keys({
   email: argenissEmail.required(),
   password: Joi.string().min(6).max(8),
   active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
-  admin: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
   name: Joi.string().min(2).max(50).regex(notNumbers).required(),
   surname: Joi.string().min(2).max(50).regex(notNumbers).required(),
   cuil: Joi.string().length(11).regex(onlyNumbers),
@@ -78,7 +76,7 @@ const userValidation = Joi.object().keys({
   githubID: Joi.string().min(3).max(50),
   relation: Joi.any().valid(['freelance', 'hired']),
   clients: Joi.array().unique((a, b) => a.id === b.id),
-  role: Joi.any()
+  role: Joi.array()
 });
 
 /**

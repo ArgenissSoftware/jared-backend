@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Joi = require('joi');
 
-var roleModel = mongoose.Schema({
+const roleModel = mongoose.Schema({
   name: String,
   active: { type: Boolean, default: true }
 });
