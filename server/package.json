@@ -5,6 +5,7 @@
   "author": "Argeniss Software",
   "main": "arc/app.js",
   "scripts": {
+    "migrate": "migrate",
     "preinstall": "npm config set package-lock false",
     "start": "node src/app.js",
     "startDev": "nodemon src/app.js"
@@ -21,6 +22,7 @@
     "jsonwebtoken": "^8.2.2",
     "lodash": "^4.17.11",
     "mongoose": "^5.0.1",
+    "mongoose-migrate-2": "^0.2.5",
     "nodemailer": "^4.6.5",
     "swagger-ui-express": "^4.0.1"
   },
