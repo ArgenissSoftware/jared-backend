@@ -21,7 +21,7 @@ class CrudRestController extends BaseRestController {
    */
   registerRoutes() {
     this.router.get('/', this.list.bind(this));
-    this.router.get('/page/:pageNum/size/:pageSize/search/:search', this.list.bind(this));
+    this.router.get('/page/:pageNum/size/:pageSize', this.list.bind(this));
     this.router.post('/', this.create.bind(this));
     this.router.get('/:id', this.get.bind(this));
     this.router.put('/:id', this.update.bind(this));
@@ -35,7 +35,7 @@ class CrudRestController extends BaseRestController {
     try {
       const pageNum = req.params.pageNum;
       const pageSize = req.params.pageSize;
-      const search = req.params.search;
+      const search = req.query.search;
       const data = await this.repository.findAll(pageNum, pageSize, search);
       this._success(res, data);
     } catch (e) {
