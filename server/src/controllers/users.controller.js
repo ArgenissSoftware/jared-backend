@@ -21,7 +21,7 @@ class UsersController extends CrudRestController {
 
   registerGuards() {
     // only admins can use all users the endpoints
-    this.router.use(this.authorize('Admin'));
+     this.router.use(this.authorize('Admin'));
   }
 
   /**
@@ -51,20 +51,20 @@ class UsersController extends CrudRestController {
     }
 
     const rolesRepository = new RoleRepository();
-    let userRole;
+    let userRoles;
 
     try {
-      if (req.body.role) {
-        userRole = await rolesRepository.findOne({_id: req.body.role});
-        if (!userRole) {
+      if (req.body.roles) {
+        userRoles = await rolesRepository.findOne({_id: req.body.roles});
+        if (!userRoles) {
           this._error(res, "Role doesn't exists.")
           return
         }
       } else {
-        userRole = await rolesRepository.findOrCreate('Developer');
+        userRoles = await rolesRepository.findOrCreate('Developer');
       }
 
-      req.body.role = userRole._id;
+      req.body.roles = userRoles._id;
       req.body.password = PasswordHasher.hashPassword(req.body.password);
 
       const user = await this.repository.add(req.body);

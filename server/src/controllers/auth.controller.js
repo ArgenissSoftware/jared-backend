@@ -1,5 +1,6 @@
 const BaseRestController = require('./base-rest.controller');
 const ValidationArgenissFormat = require('../helper/validationArgenissEmail');
+const RolesRepository = require('.././repositories/role.repository')
 const PasswordHasher = require('../helper/passwordHasher');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../repositories/user.repository');
@@ -43,8 +44,8 @@ class AuthController extends BaseRestController {
     let userRole;
 
     try {
-      if (req.body.role) {
-        userRole = await rolesRepository.findOne({_id: req.body.role});
+      if (req.body.roles) {
+        userRole = await rolesRepository.findOne({_id: req.body.roles});
         if (!userRole) {
           this._error(res, "Role doesn't exists.")
           return
@@ -53,7 +54,7 @@ class AuthController extends BaseRestController {
         userRole = await rolesRepository.findOrCreate('Developer');
       }
 
-      req.body.role = userRole._id;
+      req.body.roles = userRole._id;
       req.body.password = PasswordHasher.hashPassword(req.body.password);
 
       const user = await this.repository.add(req.body);

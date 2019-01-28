@@ -6,9 +6,22 @@ const RoleModel = require('../models/role.model');
  */
 class RolesRepository extends MongooseRepository {
   constructor() {
-    super(RoleModel);
+        super(RoleModel);
   }
-
+  
+  /**
+   * Finds all instances in the model.
+   * @param {number} pageNum - amount of records to skip
+   * @param {number} pageSize - amount of records to return
+   * @param {string} search - string to search
+   */
+  async findAll(pageNum, pageSize, search) {
+    const options = {}
+    const query = {active: true};
+    super.paginationQueryOptions(pageNum, pageSize, options);
+    if (search) super.searchQueryOptions(search, this.fieldsSearch, query);
+    return super.findAll('-', query, options);
+  }
   /**
    * Find role by name.
    */
