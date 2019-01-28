@@ -1,10 +1,12 @@
 'use strict'
-var mongoose = require('./db');
-
+let Role = require('../src/models/role.model');
 exports.up = function(next){
-  mongoose.Role = [];
-  mongoose.Role.push('Admin');
-  mongoose.Role.push('Developer', next);
+  console.log("En el up de role");
+  
+  let admin = {id: '5c2bde14aa2c210028b15e54', name: "Admin"};
+  let developer = {id: '5c2bde14aa2c210028b15e53', name: "Developer"};
+  Role.create(admin);
+  Role.create(developer);
 };
 
 exports.down = function(next){

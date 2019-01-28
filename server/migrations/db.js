@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-var Role = require('../src/models/role.model');
-var User = require('../src/models/user.model');
-var Client = require('../src/models/client.model');
-module.exports = mongoose
+const database = require('../src/database');
+database.initializeMongo();
+
+const Role = require('./1548354035723-add-role');
+Role.up;
+module.exports = database;
