@@ -1,6 +1,5 @@
 const db = require('../database');
 const migrationsModel = require('../models/migration.model');
-
 const Role = require('./add-role');
 const Admin = require('./add-admin');
 
