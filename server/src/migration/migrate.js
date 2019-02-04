@@ -1,21 +1,20 @@
+const fs = require('fs');
 const db = require('../database');
 const migrationsModel = require('../models/migration.model');
-const Role = require('./add-role');
-const Admin = require('./add-admin');
-
-//If you create a new migration, you will need add it to this array 
-const migrations = [Role, Admin];
+const migrationsUrl = "./migrations/";
+const filesList = fs.readdirSync(migrationsUrl);
 
 run();
 
 async function run() {
   await db.initializeMongo();
-  for(const migration of migrations) {
-    if(await isMigrated(migration.getName())) {      
-      migrationsModel.create({name: migration.getName()});
-      migration.up();
+  for(const file of filesList) {
+    const migration = require(migrationsUrl + file);
+    if( await isMigrated(file)) {
+      await migration.up();
+      migrationsModel.create({name: file});
     } else {
-      console.log("The migration " + migration.getName() + " is already up");
+      console.log("The migration " + file + " is already up");
     }
   }
 }
