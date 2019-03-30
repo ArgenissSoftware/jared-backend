@@ -10,6 +10,15 @@ Jared Back-End installation steps
 * Build and run the docker containers: 
   `docker-compose up -d`
 
+# Run migrations #
+1. With the Back-End up run this command to access to the shell of the container:
+   `docker-compose exec server sh`
+   You can access with Kitematic to.
+2. Go to the migration folder whit: 
+   `cd ./src/migration`
+3. Run the sript: 
+   `node migrate`
+   
 # Git workflow #
 1. Update to the latest version of master - `$ git checkout master && git pull`
 2. Create a new branch for working on the issue
