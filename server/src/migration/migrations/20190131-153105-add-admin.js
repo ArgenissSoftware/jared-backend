@@ -1,5 +1,7 @@
 const UserModel = require('../../models/user.model');
 const RoleModel = require('../../models/role.model');
+const PasswordHasher = require('../../helper/passwordHasher');
+
 
 const admin = {
   username: "admin",
@@ -7,18 +9,19 @@ const admin = {
   name: "admin",
   surname: "admin",
   birthday: '01-01-1980',
+  password: PasswordHasher.hashPassword("admin"),
   roles: [],
   active: true
 }
 
-exports.up = async () => {  
+exports.up = async () => {
   if(UserModel.validateCreate(admin)) {
     try {
-      adminRolId = await RoleModel.find({name: "Admin"}, 'id');    
+      adminRolId = await RoleModel.find({name: "Admin"}, 'id');
       admin.roles = adminRolId;
       UserModel.create(admin);
     } catch(err) {
-      console.log(err);      
+      console.log(err);
     }
 
   } else {

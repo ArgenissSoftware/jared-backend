@@ -7,18 +7,18 @@ Jared Back-End installation steps
 ### How to install: ###
 * [Install Docker (If not already installed)](https://www.docker.com/get-started)
 * Clone the Jared Back-End git repository (fork the repository first if you want to contribute)
-* Build and run the docker containers: 
+* Build and run the docker containers:
   `docker-compose up -d`
 
-# Run migrations #
+# Run Database Migrations #
 1. With the Back-End up run this command to access to the shell of the container:
    `docker-compose exec server sh`
    You can access with Kitematic to.
-2. Go to the migration folder whit: 
+2. Go to the migration folder whit:
    `cd ./src/migration`
-3. Run the sript: 
+3. Run the sript:
    `node migrate`
-   
+
 # Git workflow #
 1. Update to the latest version of master - `$ git checkout master && git pull`
 2. Create a new branch for working on the issue
@@ -29,25 +29,11 @@ Jared Back-End installation steps
 5. Push your branch to github - `$ git push origin <branch-name>`
 6. Create a Pull request and assign a reviewer
 
-# Heroku deployment:
-* If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
-  `$ heroku login`
-* Log in to Container Registry. You must have Docker set up locally to continue. You should see output when you run this command.
-  `$ docker ps`
-* Now you can sign into Container Registry.
-  `$ heroku container:login`
-* Deploy your Docker-based app. Build the Dockerfile in the current directory and push the Docker image to deploy the app.
-   1. Build the docker image: `$ cd server && docker build -t jared-backend .`
-   2. Push the image to heroku: `$ heroku container:push web -a jared-backend`
 
 
 ### New API endpoints documentation:
 
 https://documenter.getpostman.com/view/5206471/RWgnWzdE
-
-### API endpoint remote url:
-
-- [Jared Backend] (https://jared-backend.herokuapp.com)
 
 Jared API Endpoints:
 * POST https://jared-backend.herokuapp.com/api/users

@@ -21,7 +21,7 @@ class UsersController extends CrudRestController {
 
   registerGuards() {
     // only admins can use all users the endpoints
-    this.router.use(this.authorize('Admin'));
+    this.router.use(/^\/(?!.*\/update_password).*$/, this.authorize('Admin'));
   }
 
   /**
@@ -36,7 +36,52 @@ class UsersController extends CrudRestController {
     this.router.delete("/:id/assign/client/:clientid", this.deleteClient.bind(this));
     this.router.post("/:id/assign/client/:clientid", this.assignClient.bind(this));
     this.router.get("/search", this.getSearch.bind(this));
+    this.router.put('/:id/update_password', this.updatePassword.bind(this))
     super.registerRoutes();
+  }
+
+  /**
+   * Update user password
+   */
+  async updatePassword(req, res) {
+    let errorMessage = "";
+    let user;
+
+    //check passwords are equal
+    if (req.body.password !== req.body.password_confirmation) {
+      errorMessage += "Passwords doesn't match";
+    }
+
+    if (errorMessage != "") {
+      this._error(res, errorMessage, 400)
+      return;
+    }
+
+    user = await this.repository.findOne(req.params.id);
+    if (!user) return this._error(res, 'User don\'t found.', 400);
+
+    // is his own password?
+    if (req.user._id == req.params.id) {
+      if (!PasswordHasher.validatePassword(req.body.password_old, user.password)) {
+        return this._error(res, 'Wrong password', 400);
+      }
+    } else {
+      // only admins can changes users passwords
+      if (!req.user.roles.some(r => r === 'Admin')) {
+        return this._error(res, 'You are not allowed', 403);
+      }
+    }
+
+
+    user.password = PasswordHasher.hashPassword(req.body.password);
+
+    try {
+      await this.repository.update(user);
+      res.status(204).end();
+    } catch (err) {
+      console.log(err);
+      this._error(res, "Failed to update user's password.", 400);
+    }
   }
 
   /**

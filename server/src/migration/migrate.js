@@ -8,7 +8,7 @@ run();
 
 async function run() {
   await db.initializeMongo();
-  for(const file of filesList) {
+  for (const file of filesList) {
     const migration = require(migrationsUrl + file);
     if( await isMigrated(file)) {
       await migration.up();
@@ -19,13 +19,14 @@ async function run() {
   }
 }
 
-async function isMigrated(migrationName) {  
+async function isMigrated(migrationName) {
   let ret = false;
   const query = await migrationsModel.find({name: migrationName});
   if(query.length == 0) {
     ret = true;
-  } else {    
+  } else {
     ret = false;
   }
   return ret;
 }
+
