@@ -23,7 +23,7 @@ const clientValidation = Joi.object().keys({
     id: Joi.string(),
     _id: Joi.string(),
     __v: Joi.any(),
-    name: Joi.string().min(3).max(100).regex(notNumbers).required(),
+    name: Joi.string().min(2).max(100).required(),
     contactName: Joi.string().min(3).max(50),
     email: commonEmail,
     address: Joi.string().min(3).max(50),

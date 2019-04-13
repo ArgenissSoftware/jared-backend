@@ -13,52 +13,8 @@ class MeController extends BaseRestController {
 
 
   registerRoutes() {
-    this.router.put('/:id/update_password', this.updatePassword.bind(this))
     this.router.get('/forgot_password', this.forgotPassword.bind(this))
     this.router.put('/reset_password', this.resetPassword.bind(this))
-  }
-
-
-  updatePassword(req, res) {
-
-    var fieldToValidate = ["id"];
-    var errorMessage = "";
-    var userId = "";
-
-    console.log("update");
-    if (req.body.hasOwnProperty('id')) {
-      errorMessage = ValidationData(fieldToValidate, req.body);
-      userId = req.body.id;
-    }
-    else {
-      errorMessage = ValidationData(fieldToValidate, req.params);
-      userId = req.params.id;
-    }
-
-    //check passwords are equal
-    if (req.body.password !== req.body.password_confirmation) {
-      errorMessage += "Passwords doesn't match";
-    }
-
-    if (errorMessage != "") {
-      this._error(res, errorMessage, 500)
-      return;
-    }
-
-    //create auxiliar user
-    var userNewData = { 'password': `${req.body.password}` };
-    userNewData.password = PasswordHasher.hashPassword(req.body.password);
-
-    //update
-    const repo = new UserRepository();
-    repo.patch(userId, userNewData, (err, data) => {
-
-      if (err) {
-        this._error(res, "Failed to update user's password.", 500);
-        return;
-      }
-      res.status(204).end();
-    });
   }
 
   forgotPassword(req, res) {
