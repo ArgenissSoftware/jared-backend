@@ -35,7 +35,6 @@ class UsersController extends CrudRestController {
     this.router.put("/disable/:id", this.disable.bind(this));
     this.router.delete("/:id/assign/client/:clientid", this.deleteClient.bind(this));
     this.router.post("/:id/assign/client/:clientid", this.assignClient.bind(this));
-    this.router.get("/search", this.getSearch.bind(this));
     this.router.put('/:id/update_password', this.updatePassword.bind(this))
     super.registerRoutes();
   }
@@ -88,7 +87,7 @@ class UsersController extends CrudRestController {
    * Create resource
    */
   async create(req, res) {
-    var validation = this.repository.model.validateUpdate(req.body);
+    var validation = this.repository.model.validateCreate(req.body);
     if (validation.error) {
       // validation error
       this._error(res, validation.error.details, 422);
@@ -99,17 +98,13 @@ class UsersController extends CrudRestController {
     let userRoles;
 
     try {
-      if (req.body.roles) {
-        userRoles = await rolesRepository.findOne({_id: req.body.roles});
-        if (!userRoles) {
-          this._error(res, "Role doesn't exists.")
-          return
-        }
+      if (req.body.roles && req.body.roles.length) {
+        userRoles = req.body.roles
       } else {
-        userRoles = await rolesRepository.findOrCreate('Developer');
+        userRoles = [await rolesRepository.findOrCreate('Developer')];
       }
 
-      req.body.roles = userRoles._id;
+      req.body.roles = userRoles;
       req.body.password = PasswordHasher.hashPassword(req.body.password);
 
       const user = await this.repository.add(req.body);
@@ -268,24 +263,6 @@ class UsersController extends CrudRestController {
           this._success(res, data);
         }
       });
-  }
-
-
-    /**
-   * Get by search
-   * @param {request} req
-   * @param {response} res
-   */
-  async getSearch(req, res) {
-    try {
-      if (req.body){
-        const data = await this.repository.findAllByField(req.body.search, req.body.fieldssearch)
-        if (!data) return this._notFound(res);
-        this._success(res, data);
-      }
-    } catch (e) {
-      this._error(e);
-    }
   }
 }
 module.exports = UsersController;
