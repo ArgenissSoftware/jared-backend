@@ -73,7 +73,7 @@ class UsersRepository extends MongooseRepository {
   findOne(id) {
     return this.model.findOne({
       _id: id
-    }).populate('clients').lean().exec();
+    }).populate('clients','-employees').populate('roles').lean().exec();
   }
 }
 
