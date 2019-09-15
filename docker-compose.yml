@@ -24,7 +24,7 @@ services:
       - backend
     volumes:
       - ./data:/data/db
-    command: mongod --smallfiles --logpath=/dev/null --dbpath=/data/db # --quiet
+    command: mongod --logpath=/dev/null --dbpath=/data/db # --quiet
 
 networks:
   backend:
