@@ -8,16 +8,13 @@ Jared Back-End installation steps
 * [Install Docker (If not already installed)](https://www.docker.com/get-started)
 * Clone the Jared Back-End git repository (fork the repository first if you want to contribute)
 * Build and run the docker containers:
+
   `docker-compose up -d`
 
 # Run Database Migrations #
-1. With the Back-End up run this command to access to the shell of the container:
-   `docker-compose exec server sh`
-   You can access with Kitematic to.
-2. Go to the migration folder whit:
-   `cd ./src/migration`
-3. Run the sript:
-   `node migrate`
+1. Once the containers are running:
+
+   `docker-compose exec server sh -c "cd src/migration; node migrate.js"`
 
 # Git workflow #
 1. Update to the latest version of master - `$ git checkout master && git pull`
@@ -35,148 +32,3 @@ Jared Back-End installation steps
 
 https://documenter.getpostman.com/view/5206471/RWgnWzdE
 
-Jared API Endpoints:
-* POST https://jared-backend.herokuapp.com/api/users
-  Request:
-  ```javascript
-  {
-    "username": "cuti",
-    "email": "cuti@mail.com",
-    "password": "cuti"
-  }
-  ```
-  Response:
-  ```javascript
-  {
-    "status": 200,
-    "errorInfo": "",
-    "data": {
-        "message": "User created!"
-    }
-  }
-  ```
-  * POST https://jared-backend.herokuapp.com/auth/login
-    Request:
-    ```javascript
-    {
-      "email": "cuti@mail.com",
-      "password": "cuti"
-    }
-    ```
-    Response:
-    ```javascript
-    {
-      "status": 200,
-      "errorInfo": "",
-      "data": {
-          "message": "Login correct!"
-      }
-    }
-    ```
-* GET https://jared-backend.herokuapp.com/api/users/email/cuti@mail.com
-  ```javascript
-    {
-        "status": 200,
-        "errorInfo": "",
-        "data": [
-            {
-                "_id": "5a8436b7a1af260010767191",
-                "email": "cuti@mail.com",
-                "username": "cuti",
-                "active": true,
-                "__v": 0,
-                "clients": [],
-                "relation": "hired"
-            }
-        ]
-    }
-  ```
-* GET https://jared-backend.herokuapp.com/api/users/username/cuti
-    ```javascript
-    {
-      "status": 200,
-      "errorInfo": "",
-      "data": {
-          "_id": "5a8436b7a1af260010767191",
-          "email": "cuti@mail.com",
-          "username": "cuti",
-          "active": true,
-          "__v": 0,
-          "clients": [],
-          "relation": "hired"
-      }
-    }
-    ```
-* GET https://jared-backend.herokuapp.com/api/users
-    ```javascript
-    {
-    "status": 200,
-     "errorInfo": "",
-     "data": [
-         {
-             "_id": "5a68b6516dc9920010b16229",
-             "email": "alexis@test.com2",
-             "username": "alexisrcausa2",
-             "active": true,
-             "__v": 0,
-             "clients": [],
-             "relation": "hired"
-         },
-         {
-             "_id": "5a8436b7a1af260010767191",
-             "email": "cuti@mail.com",
-             "username": "cuti",
-             "active": true,
-             "__v": 0,
-             "clients": [],
-             "relation": "hired"
-         }
-     ]
-    }
-    ```
-* GET https://jared-backend.herokuapp.com/api/users/page/2
-    ```javascript
-    {
-        "status": 200,
-        "data": [
-            {
-               "_id": "5a8436b7a1af260010767191",
-               "email": "cuti@mail.com",
-               "username": "cuti",
-               "active": true,
-               "__v": 0,
-               "clients": [],
-               "relation": "hired"
-             }
-        ]
-    }
-    ```
-* DELETE https://jared-backend.herokuapp.com/api/users/disable/5a8436b7a1af260010767191
-```javascript
-req =  {
-	"id": "5a8436b7a1af260010767191",
- }
-
-{
-    "status": 200,
-    "errorInfo": "",
-    "data": {
-        "message": "User deleted!"
-    }
-}
-```
-* PUT https://jared-backend.herokuapp.com/api/users/5a8436b7a1af260010767191
-```javascript
-req =  {
-	"id": "5a8436b7a1af260010767191",
-    "username": "aarias"
- }
-resp =
-{
-    "status": 200,
-    "errorInfo": "",
-    "data": {
-        "message": "User updated!"
-    }
-}
-```
