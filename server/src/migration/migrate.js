@@ -7,7 +7,7 @@ const filesList = fs.readdirSync(migrationsUrl);
 run();
 
 async function run() {
-  await db.initializeMongo();
+  const dbConnection = await db.initializeMongo();
   for (const file of filesList) {
     const migration = require(migrationsUrl + file);
     if( await isMigrated(file)) {
@@ -17,6 +17,8 @@ async function run() {
       console.log("The migration " + file + " is already up");
     }
   }
+  dbConnection.close();
+  console.log('DB migration finished');
 }
 
 async function isMigrated(migrationName) {
