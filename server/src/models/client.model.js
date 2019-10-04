@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const url = Joi.string().regex(/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i);
-const commonEmail = Joi.string().email({ minDomainAtoms: 2 });
+const commonEmail = Joi.string().email({ minDomainSegments: 2 });
 const notNumbers = /^([^0-9]*)$/;
 
 const clientModel = mongoose.Schema({
@@ -28,7 +28,7 @@ const clientValidation = Joi.object().keys({
     email: commonEmail,
     address: Joi.string().min(3).max(50),
     url: url,
-    active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
+    active: Joi.boolean(),
     employees: Joi.array().unique((a, b) => a.id !== b.id)
 });
 
@@ -41,10 +41,10 @@ clientModel.index({name: 1}, {unique: true});
  * Validation methods
  */
 clientModel.statics.validateCreate = (data) => {
-    return Joi.validate(data, clientValidation, { abortEarly: false });
+    return clientValidation.validate(data, { abortEarly: false });
 };
 clientModel.statics.validateUpdate = (data) => {
-    return Joi.validate(data, clientValidation, { abortEarly: false });
+    return clientValidation.validate(data, { abortEarly: false });
 };
 
 module.exports = mongoose.model("ClientModel", clientModel);

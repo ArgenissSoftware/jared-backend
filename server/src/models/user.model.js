@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const argenissEmail = Joi.string().regex(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(argeniss)\.com$/);
 const notNumbers = /^([^0-9]*)$/;
@@ -57,7 +57,7 @@ const userValidation = Joi.object().keys({
   username: Joi.string().min(3).max(15).required(),
   email: argenissEmail.required(),
   password: Joi.string().min(6).max(16),
-  active: Joi.boolean().truthy(['yes', '1', 'true']).falsy('no', '0', 'false'),
+  active: Joi.boolean(),
   name: Joi.string().min(2).max(50).regex(notNumbers).required(),
   surname: Joi.string().min(2).max(50).regex(notNumbers).required(),
   cuil: Joi.string().length(11).regex(onlyNumbers),
@@ -74,7 +74,7 @@ const userValidation = Joi.object().keys({
   startWorkDate: Joi.date().max('now').min(Joi.ref('birthday')),
   alarmCode: Joi.string().min(3).max(50).regex(onlyNumbers),
   githubID: Joi.string().min(3).max(50),
-  relation: Joi.any().valid(['freelance', 'hired']),
+  relation: Joi.any().valid('freelance', 'hired'),
   clients: Joi.array().unique((a, b) => a.id === b.id),
   roles: Joi.array()
 });
@@ -89,10 +89,10 @@ userModel.index({email: 1}, {unique: true});
  * Validation methods
  */
 userModel.statics.validateCreate = (data) => {
-  return Joi.validate(data, userValidation, { abortEarly: false });
+  return userValidation.validate(data, { abortEarly: false });
 };
 userModel.statics.validateUpdate =  (data) => {
-  return Joi.validate(data, userValidation, { abortEarly: false });
+  return userValidation.validate(data, { abortEarly: false });
 };
 
 module.exports = mongoose.model( "UserModel", userModel );
