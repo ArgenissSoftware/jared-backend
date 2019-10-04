@@ -1,5 +1,4 @@
 const CrudRestController = require('./crud-rest.controller');
-const ValidationData = require('../helper/validationIncomingData');
 const ClientRepository = require('../repositories/client.repository');
 const UserModel = require('../models/user.model');
 const ClientModel = require('../models/client.model');

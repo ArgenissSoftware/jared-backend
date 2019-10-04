@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const roleModel = mongoose.Schema({
   name: String,
@@ -22,10 +22,10 @@ roleModel.index({name: 1}, {unique: true});
  * Validation methods
  */
 roleModel.statics.validateCreate = (data) => {
-  return Joi.validate(data, roleValidation, { abortEarly: false });
+  return roleValidation.validate(data, { abortEarly: false });
 };
 roleModel.statics.validateUpdate = (data) => {
-  return Joi.validate(data, roleValidation, { abortEarly: false });
+  return roleValidation.validate(data, { abortEarly: false });
 };
 
 module.exports = mongoose.model("RoleModel", roleModel);

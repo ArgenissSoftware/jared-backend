@@ -2,7 +2,6 @@ const BaseRestController = require('./base-rest.controller');
 const ValidationData = require('../helper/validationIncomingData');
 const MailSender = require("../helper/mailSender");
 const crypto = require('crypto');
-const PasswordHasher = require('../helper/passwordHasher');
 const UserRepository = require('../repositories/user.repository');
 
 
