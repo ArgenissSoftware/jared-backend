@@ -1,19 +1,16 @@
 {
   "name": "tests",
   "version": "1.0.0",
-  "description": "Backend unit tests using Mocha and Sinon",
+  "description": "Backend unit tests using Jest",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "sinon": "^4.1.2"
-  },
   "devDependencies": {
-    "mocha": "^4.0.1"
+    "jest": "^24.9.0"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha --recursive"
+    "test": "jest"
   },
   "author": "Argeniss Software",
   "license": "ISC"
