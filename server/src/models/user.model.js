@@ -52,7 +52,7 @@ const userModel = mongoose.Schema({
  */
 const userValidation = Joi.object().keys({
   id: Joi.string(),
-  _id: Joi.string(),
+  _id: Joi.any().id(),
   __v: Joi.any(),
   username: Joi.string().min(3).max(15).required(),
   email: argenissEmail.required(),
@@ -93,6 +93,10 @@ userModel.statics.validateCreate = (data) => {
 };
 userModel.statics.validateUpdate =  (data) => {
   return userValidation.validate(data, { abortEarly: false });
+};
+
+userModel.statics.validateUser = (data) => {
+  return userValidation.validate(data.toObject(), { abortEarly: false })
 };
 
 module.exports = mongoose.model( "UserModel", userModel );
