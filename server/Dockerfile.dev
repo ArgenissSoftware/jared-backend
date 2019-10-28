@@ -3,6 +3,10 @@ FROM node:9
 # Create app directory
 WORKDIR /usr/src/app
 
+COPY package.json . /
+COPY yarn.lock . /
+RUN yarn --prod && yarn cache clean
+
 COPY . .
 
 # Install app dependencies
