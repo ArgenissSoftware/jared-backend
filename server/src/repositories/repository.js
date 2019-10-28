@@ -3,7 +3,6 @@
  * @class MongooseRepository
  */
 class MongooseRepository {
-
   /**
    * Constructor
    * @param {Model} model
@@ -13,6 +12,7 @@ class MongooseRepository {
       throw new Error('Mongoose model type cannot be null.');
     }
     this.model = model;
+    this.queryFields = '-';
   }
 
   /**
@@ -28,13 +28,27 @@ class MongooseRepository {
   }
 
   /**
+   * Finds all instances in the model paginated
+   * @param {number} pageNum - amount of records to skip
+   * @param {number} pageSize - amount of records to return
+   * @param {string} search - string to search
+   * @param {object} query - string to search
+   */
+  async findAllPaginated(pageNum, pageSize, search, query = {active: true}) {
+    const options = {}
+    this.paginationQueryOptions(pageNum, pageSize, options);
+    if (search) this.searchQueryOptions(search, this.fieldsSearch, query);
+    return this.findAll(this.queryFields, query, options);
+  }
+
+  /**
    * Find an object.
    * @param {string} id - Object Id
    */
   findOne(id) {
     return this.model.findOne({
       _id: id
-    }).lean().exec();
+    }, this.queryFields).lean().exec();
   }
 
   /**
@@ -127,7 +141,7 @@ class MongooseRepository {
     let arrayQuery = []
     fieldsSearch.forEach(e => {
       let fieldQuery = {};
-      fieldQuery[e] = new RegExp(search,'i');
+      fieldQuery[e] = new RegExp(search, 'i');
       arrayQuery.push(fieldQuery);
     });
     query.$or = arrayQuery;

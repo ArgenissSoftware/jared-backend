@@ -71,9 +71,9 @@ class BaseRestController {
   _sendResponse(res, err, data) {
     if (err) {
       this._error(res, err.message, err.status);
-      return
+    } else {
+      this._success(res, data);
     }
-    this._success(res, data);
   }
 
   _hasRequiredParams(res, params, data) {

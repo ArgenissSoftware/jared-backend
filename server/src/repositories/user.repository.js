@@ -2,23 +2,13 @@ const MongooseRepository = require('./repository');
 const UserModel = require('../models/user.model');
 
 class UsersRepository extends MongooseRepository {
+  /**
+   * Constructor
+   */
   constructor() {
     super(UserModel);
     this.fieldsSearch = ['name', 'email', 'surname', 'username'];
-  }
-
-  /**
-   * Finds all instances in the model.
-   * @param {number} pageNum - amount of records to skip
-   * @param {number} pageSize - amount of records to return
-   * @param {string} search - string to search
-   */
-  async findAll(pageNum, pageSize, search) {
-    const options = {}
-    const query = {active: true};
-    super.paginationQueryOptions(pageNum, pageSize, options);
-    if (search) super.searchQueryOptions(search, this.fieldsSearch, query);
-    return super.findAll('-password', query, options);
+    this.queryFields = '-password';
   }
 
   /**
@@ -36,14 +26,14 @@ class UsersRepository extends MongooseRepository {
    * Find user by Email.
    */
   findOneByEmail(email) {
-    return this.model.findOne({ email: email }, '-password').lean().exec();
+    return this.model.findOne({ email: email }, this.queryFields).lean().exec();
   }
 
   /**
    * Find user by username.
    */
   findOneByName(username) {
-    return this.model.findOne({ username: username }, '-password').lean().exec();
+    return this.model.findOne({ username: username }, this.queryFields).lean().exec();
   }
 
   /**
@@ -73,7 +63,7 @@ class UsersRepository extends MongooseRepository {
   findOne(id) {
     return this.model.findOne({
       _id: id
-    }).populate('clients','-employees').populate('roles').lean().exec();
+    }, this.queryFields).populate('clients','-employees').populate('roles').lean().exec();
   }
 }
 
