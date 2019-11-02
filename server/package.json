@@ -7,7 +7,8 @@
   "scripts": {
     "preinstall": "npm config set package-lock false",
     "start": "node src/app.js",
-    "startDev": "nodemon src/app.js"
+    "startDev": "nodemon src/app.js",
+    "test": "jest"
   },
   "dependencies": {
     "@hapi/joi": "^16.1.5",
@@ -25,7 +26,8 @@
     "swagger-ui-express": "^4.0.1"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "jest": "^24.9.0"
   },
   "keywords": [],
   "license": "ISC"
