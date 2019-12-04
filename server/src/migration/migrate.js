@@ -12,7 +12,7 @@ async function run() {
     const migration = require(migrationsUrl + file);
     if( await isMigrated(file)) {
       await migration.up();
-      migrationsModel.create({name: file});
+      await migrationsModel.create({name: file});
     } else {
       console.log("The migration " + file + " is already up");
     }
