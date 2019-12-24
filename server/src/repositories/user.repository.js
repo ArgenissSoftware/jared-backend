@@ -17,9 +17,14 @@ class UsersRepository extends MongooseRepository {
    * @param {number} pageNum - amount of records to skip
    * @param {number} pageSize - amount of records to return
    */
-  findUserClients(id, pageNum, pageSize) {
-    const query = super.paginationQueryOptions(pageNum, pageSize);
-    return this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
+  async findUserClients(id, pageNum, pageSize) {
+    const query = super.paginationQueryOptions(pageNum, pageSize, {});
+    const clients = await this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
+     
+    return {
+      list:  clients.clients || [],
+      count: await this.model.countDocuments(query)
+      }
   }
 
   /**
