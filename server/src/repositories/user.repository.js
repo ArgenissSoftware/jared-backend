@@ -17,13 +17,20 @@ class UsersRepository extends MongooseRepository {
    * @param {number} pageNum - amount of records to skip
    * @param {number} pageSize - amount of records to return
    */
-  async findUserClients(id, pageNum, pageSize) {
-    const query = super.paginationQueryOptions(pageNum, pageSize, {});
-    const clients = await this.model.findById(id, 'clients').populate({ path: 'clients', options: query }).lean().exec();
-     
+
+   async findUserClients(id, pageNum, pageSize, search, query = {active: true}) {
+    this.queryFields = '-';
+    const myfieldsSearch = ['name', 'email', 'contactName'];
+    const options = {};
+    super.paginationQueryOptions(pageNum, pageSize, options);
+    if (search) super.searchQueryOptions(search, myfieldsSearch, query);
+
+    const clients = await this.model.findById(id, 'clients').populate({ path: 'clients', options: options, match: query}).lean().exec();
+    const count = await this.model.findById(id, 'clients').populate({ path: 'clients', match: query}).lean().exec();
+   
     return {
       list:  clients.clients || [],
-      count: await this.model.countDocuments(query)
+      count: count.clients.length
       }
   }
 

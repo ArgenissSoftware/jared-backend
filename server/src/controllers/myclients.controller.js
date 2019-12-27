@@ -15,13 +15,14 @@ class MyClientsController extends CrudRestController {
   registerRoutes() {
     this.router.get('/page/:pageNum/size/:pageSize', this.getMyClients.bind(this));
   }
-
+  
   async getMyClients(req, res) {
     try {
       const pageNum = req.params.pageNum;
       const pageSize = req.params.pageSize;
       const id = req.user._id;
-      const data = await this.repository.findUserClients(id, pageNum, pageSize);
+      const search = req.query.search;
+      const data = await this.repository.findUserClients(id, pageNum, pageSize, search);
       this._success(res, data);
     } catch (e) {
       this._error(res, e);
