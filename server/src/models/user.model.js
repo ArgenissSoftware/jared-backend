@@ -56,7 +56,7 @@ const userValidation = Joi.object().keys({
   __v: Joi.any(),
   username: Joi.string().min(3).max(15).required(),
   email: argenissEmail.required(),
-  password: Joi.string().min(6).max(16),
+  password: Joi.string().min(6).max(16).required(),
   active: Joi.boolean(),
   name: Joi.string().min(2).max(50).regex(notNumbers).required(),
   surname: Joi.string().min(2).max(50).regex(notNumbers).required(),
