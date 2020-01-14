@@ -15,4 +15,4 @@ new UsersController('/users', router);
 new RolesController('/roles', router);
 new WorkedHoursController('/workedHours', router);
 
-module.exports = router
+module.exports = router;

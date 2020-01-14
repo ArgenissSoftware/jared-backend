@@ -13,9 +13,8 @@ class WorkedHoursRepository extends MongooseRepository {
    * get all records of a user
    */
   async findMonthWorkedHours(userId, clientId, month, year) {
-    const res = await this.model.find({user: userId, client :clientId,
-       day: { $lt: new Date(), $gt: new Date(year+','+month) }}).exec();
-    const count = await this.model.countDocuments(query);
+    const res = await this.model.find({userId: userId, clientId: clientId, day: { $lt: new Date(), $gt: new Date(year+','+month) }}).exec();
+    const count = await this.model.countDocuments(res);
     return {list: res, count: count};
   }
 

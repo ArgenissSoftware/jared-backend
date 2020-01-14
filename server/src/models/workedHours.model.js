@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 
 const workedHoursModel = mongoose.Schema({
-  client: {type: mongoose.Schema.Types.ObjectId, ref: 'ClientModel'},
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'},
+  clientId: {type: mongoose.Schema.Types.ObjectId, ref: 'ClientModel'},
+  userId: {type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'},
   day: Date,
   hours: String
 });
@@ -14,8 +14,8 @@ const workedHoursValidation = Joi.object().keys({
   __v: Joi.any(),
   clientId: Joi.string().required(),
   userId: Joi.string().required(),
-  day: Joi.date().default('now'),
-  hours: Joi.number().min(0).max(24)
+  day: Joi.date().default('now').required(),
+  hours: Joi.number().min(0).max(24).required()
 });
   
 /*
