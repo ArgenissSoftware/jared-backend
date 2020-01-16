@@ -1,10 +1,10 @@
-const CrudRestController = require('./crud-rest.controller');
+const BaseRestController = require('./base-rest.controller');
 const WorkedHoursRepository = require('../repositories/workedHours.repository')
 
 /**
  * Base Controller
  */
-class WorkedHoursController extends CrudRestController {
+class WorkedHoursController extends BaseRestController {
 
   /**
    * Constructor
@@ -12,7 +12,8 @@ class WorkedHoursController extends CrudRestController {
    * @param {parentRouter} parentRouter
    */
   constructor(basePath, parentRouter) {
-    super(basePath, parentRouter, new WorkedHoursRepository());
+    super(basePath, parentRouter);
+    this.repository = new WorkedHoursRepository();
   }
 
   registerRoutes() {
