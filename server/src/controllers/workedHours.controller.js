@@ -17,15 +17,17 @@ class WorkedHoursController extends BaseRestController {
   }
 
   registerRoutes() {
-    //this.router.get('/user/:user/client/:client/month/:month', this.getMonthHours.bind(this));
     this.router.get('/client/:client/year/:year/month/:month', this.getMonthHours.bind(this));
     //this.router.post('/user/:user/client/:client/day/:day/hours/:hours', this.setDayHours.bind(this));
     this.router.post('/client/:client/day/:day/hours/:hours', this.setDayHours.bind(this));
+
+    this.router.get('/user/:user/client/:client/year/:year/month/:month', this.getMonthHours.bind(this));
+    this.router.post('/', this.setDayHours.bind(this));
   }
 
   async getMonthHours(req, res) {
     try{ 
-      const userId = req.user._id;
+      const userId = (req.params.user) ? req.params.user : req.user._id ;
       const clientId = req.params.client;
       const year = req.params.year;
       const month = req.params.month;
