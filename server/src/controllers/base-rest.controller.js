@@ -10,12 +10,27 @@ class BaseRestController {
   /**
    * Constructor
    * @param {string} basePath
-   * @param {parentRouter} parentRouter
+   * @param {Router} parentRouter
    */
-  constructor(basePath, parentRouter) {
+  constructor(basePath, parentRouter, ...nestedControllers) {
     this.authorize = authorize;
-    this.router = express.Router();
-    parentRouter.use(basePath, this.router);
+    this.router = express.Router({ mergeParams: true });
+    this.basePath = basePath;
+    if (parentRouter) {
+      this.setParentRoute(parentRouter);
+    }
+
+    nestedControllers.forEach(controller => {
+      controller.setParentRoute(this.router);
+    });
+  }
+
+  /**
+   * Set the parent route and register all the routes
+   * @param {Router} parentRouter
+   */
+  setParentRoute(parentRouter) {
+    parentRouter.use(this.basePath, this.router);
     this.registerGuards();
     this.registerRoutes();
   }

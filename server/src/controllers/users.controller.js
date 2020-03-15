@@ -15,8 +15,9 @@ class UsersController extends CrudRestController {
    * @param {string} basePath
    * @param {parentRouter} parentRouter
    */
-  constructor(basePath, parentRouter) {
-    super(basePath, parentRouter, new UserRepository());
+  constructor(...args) {
+    super(...args);
+    this.setRepository(new UserRepository());
   }
 
   registerGuards() {

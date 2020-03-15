@@ -6,13 +6,10 @@ const BaseRestController = require('./base-rest.controller');
 class CrudRestController extends BaseRestController {
 
   /**
-   * Constructor
-   * @param {string} basePath
-   * @param {parentRouter} parentRouter
+   *
    * @param {Repository} repository
    */
-  constructor(basePath, parentRouter, repository) {
-    super(basePath, parentRouter);
+  setRepository(repository) {
     this.repository = repository;
   }
 

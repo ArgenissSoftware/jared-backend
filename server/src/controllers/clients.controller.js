@@ -13,8 +13,9 @@ class ClientsController extends CrudRestController {
    * @param {string} basePath
    * @param {parentRouter} parentRouter
    */
-  constructor(basePath, parentRouter) {
-    super(basePath, parentRouter, new ClientRepository());
+  constructor(...args) {
+    super(...args);
+    this.setRepository(new ClientRepository());
   }
 
   /**

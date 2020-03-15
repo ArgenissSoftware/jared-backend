@@ -11,8 +11,9 @@ class RolesController extends CrudRestController {
    * @param {string} basePath
    * @param {parentRouter} parentRouter
    */
-  constructor(basePath, parentRouter) {
-    super(basePath, parentRouter, new RolesRepository());
+  constructor(...args) {
+    super(...args);
+    this.setRepository(new RolesRepository());
   }
 
   /**

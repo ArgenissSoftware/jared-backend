@@ -4,32 +4,43 @@ const WorkedHoursModel = require('../models/workedHours.model');
 /**
  * Worked hours repository
  */
-class WorkedHoursRepository extends MongooseRepository {
+class WorkedHoursRepository {
+
   constructor() {
-    super(WorkedHoursModel);
+    this.model = WorkedHoursModel;
   }
 
   /**
-   * get all records of a user
+   * Get the worked hours of a user in a given month
+   * @param {string} userId user's id
+   * @param {string} clientId client's id
+   * @param {number} month
+   * @param {number} year
    */
-  async findMonthWorkedHours(userId, clientId, month, year) {
-    const res = await this.model.find({userId: userId, clientId: clientId, day: { $lt: new Date(), $gt: new Date(year+','+month) }}).exec();
-    const count = await this.model.countDocuments(res);
-    return {list: res, count: count};
+  async getUserMonthHours(userId, clientId, month, year) {
+    const beggin = new Date().setFullYear(year, month, 0);
+    const res = await this.model.find({userId: userId, clientId: clientId, day: { $lte: beggin, $gte: new Date(`${year}-${month}-01`) }}).exec();
+    return res;
   }
 
-  addWorkedHours(workedHours) {
-    return this.model.create(workedHours);
-  }
+  /**
+   * Set the worked hours
+   * @param {string} userId user's id
+   * @param {string} clientId client's id
+   * @param {*} day date
+   * @param {*} hours worked hours
+   */
+  set(userId, clientId, day, hours) {
+    const filter = {userId, clientId, day};
 
-  updateWorkedHours(workedHours) {
-    return this.model.findByIdAndUpdate(workedHours._id, entity, {
+    console.log(filter, hours)
+
+    // upsert
+    return this.model.findOneAndUpdate(filter, {hours}, {
       new: true,
-      passRawResult: true, 
-      lean: true
-    }).exec();
+      upsert: true
+    });
   }
-
 }
 
 module.exports = WorkedHoursRepository;

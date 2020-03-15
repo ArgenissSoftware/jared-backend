@@ -3,19 +3,20 @@ const UserRepository = require('../repositories/user.repository');
 
 class MyClientsController extends CrudRestController {
 
-   /**
+  /**
    * Constructor
    * @param {string} basePath
    * @param {parentRouter} parentRouter
    */
-  constructor(basePath, parentRouter) {
-    super(basePath, parentRouter, new UserRepository());
+  constructor(...args) {
+    super(...args);
+    this.setRepository(new UserRepository());
   }
 
   registerRoutes() {
     this.router.get('/page/:pageNum/size/:pageSize', this.getMyClients.bind(this));
   }
-  
+
   async getMyClients(req, res) {
     try {
       const pageNum = req.params.pageNum;

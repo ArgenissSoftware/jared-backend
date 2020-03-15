@@ -59,7 +59,7 @@ server.get('/', (req, res) => {
 server.use("/api", routes);
 
 // Adding swagger.
-server.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// server.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // expose templates and images as public
 server.use(express.static(__dirname + '/public'));

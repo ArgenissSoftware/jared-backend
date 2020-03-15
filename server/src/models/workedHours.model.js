@@ -17,10 +17,10 @@ const workedHoursValidation = Joi.object().keys({
   day: Joi.date().default('now').required(),
   hours: Joi.number().min(0).max(24).required()
 });
-  
-/*
-indexes
-*/
+
+/**
+ * indexes
+ */
 workedHoursModel.index({userId: 1, clientId: 1, day: 1}, {unique: true});
 
 /**
