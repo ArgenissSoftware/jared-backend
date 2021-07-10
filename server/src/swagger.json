@@ -33,9 +33,7 @@
       "description": "Basic CRUD operations for the users of the app."
     }
   ],
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "securityDefinitions": {
     "Bearer": {
       "type": "apiKey",
@@ -43,18 +41,12 @@
       "in": "header"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/clients": {
       "get": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Gets all the clients",
         "responses": {
           "200": {
@@ -66,9 +58,7 @@
         }
       },
       "post": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Creates a new client in the app",
         "parameters": [
           {
@@ -96,9 +86,7 @@
     },
     "/clients/{id}": {
       "get": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Gets a client for it's id",
         "description": "Returns a single client for it's id",
         "parameters": [
@@ -123,9 +111,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Deletes an already existing client of the app",
         "parameters": [
           {
@@ -146,9 +132,7 @@
         }
       },
       "put": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Update data from a client",
         "description": "Update the info from a client via it's ID",
         "parameters": [
@@ -181,9 +165,7 @@
     },
     "/clients/byName": {
       "get": {
-        "tags": [
-          "clients"
-        ],
+        "tags": ["clients"],
         "summary": "Gets a client by it's name",
         "parameters": [
           {
@@ -209,9 +191,7 @@
     },
     "/users": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Gets all the users",
         "responses": {
           "200": {
@@ -223,9 +203,7 @@
         }
       },
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Creates a new user in the app",
         "parameters": [
           {
@@ -253,9 +231,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Gets a user for it's id.",
         "description": "Returns a single user for it's id.",
         "parameters": [
@@ -277,9 +253,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Deletes an already existing user of the app.",
         "parameters": [
           {
@@ -300,9 +274,7 @@
         }
       },
       "put": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Update data from a user",
         "description": "Update the info from a user via it's ID.",
         "parameters": [
@@ -338,9 +310,7 @@
     },
     "/users/{id}/clients": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Gets all the clients from one user",
         "parameters": [
           {
@@ -366,9 +336,7 @@
     },
     "/users/username/{username}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Gets an user by it's user account name.",
         "parameters": [
           {
@@ -394,9 +362,7 @@
     },
     "/users/email/{email}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Gets an user by it's email account.",
         "parameters": [
           {
@@ -419,9 +385,7 @@
     },
     "/users/disable/{id}": {
       "put": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Disables an user",
         "description": "Pass the user ID to disable the user",
         "parameters": [
@@ -445,9 +409,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Operation to log in a user into the application.",
         "parameters": [
           {
@@ -475,9 +437,7 @@
     },
     "/auth/refreshToken": {
       "get": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "security": [
           {
             "Bearer": []
@@ -508,9 +468,7 @@
     },
     "/me/{id}/update_password": {
       "put": {
-        "tags": [
-          "me"
-        ],
+        "tags": ["me"],
         "summary": "Operation to update an user password",
         "description": "Use the user ID in path, then pass the new password and it's confirmation",
         "parameters": [
@@ -543,9 +501,7 @@
     },
     "/me/forgot_password": {
       "get": {
-        "tags": [
-          "me"
-        ],
+        "tags": ["me"],
         "summary": "Operation to send in a specified mail the user's password.",
         "parameters": [
           {
@@ -568,9 +524,7 @@
     },
     "/me/reset_password": {
       "put": {
-        "tags": [
-          "me"
-        ],
+        "tags": ["me"],
         "summary": "Operation to reset user's password",
         "parameters": [
           {
@@ -615,12 +569,7 @@
           "description": "Confirmation of the new password"
         }
       },
-      "required": [
-        "id",
-        "token",
-        "password",
-        "confirm_password"
-      ]
+      "required": ["id", "token", "password", "confirm_password"]
     },
     "NewPasswordBody": {
       "type": "object",
@@ -664,11 +613,7 @@
           "description": "Password of the user to log in the app."
         }
       },
-      "required": [
-        "email",
-        "username",
-        "password"
-      ]
+      "required": ["email", "username", "password"]
     },
     "UpdateUser": {
       "type": "object",
@@ -762,11 +707,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "email",
-        "username"
-      ]
+      "required": ["id", "email", "username"]
     },
     "GetUserResponse": {
       "type": "object",
@@ -905,9 +846,7 @@
           }
         }
       },
-      "required": [
-        "name"
-      ]
+      "required": ["name"]
     },
     "UpdateClient": {
       "type": "object",
@@ -953,10 +892,7 @@
           }
         }
       },
-      "required": [
-        "_id",
-        "name"
-      ]
+      "required": ["_id", "name"]
     },
     "GetClientResponse": {
       "type": "object",
@@ -1004,9 +940,7 @@
       }
     },
     "GetClientListResponse": {
-      "required": [
-        "clients"
-      ],
+      "required": ["clients"],
       "properties": {
         "clients": {
           "type": "array",
@@ -1017,9 +951,7 @@
       }
     },
     "GetUserListResponse": {
-      "required": [
-        "users"
-      ],
+      "required": ["users"],
       "properties": {
         "users": {
           "type": "array",
@@ -1030,10 +962,7 @@
       }
     },
     "GetUserClientsResponse": {
-      "required": [
-        "clients",
-        "_id"
-      ],
+      "required": ["clients", "_id"],
       "properties": {
         "clients": {
           "type": "array",
@@ -1048,9 +977,7 @@
       }
     },
     "ErrorResponse": {
-      "required": [
-        "message"
-      ],
+      "required": ["message"],
       "properties": {
         "message": {
           "type": "string"
