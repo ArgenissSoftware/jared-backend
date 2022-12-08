@@ -17,7 +17,7 @@
     "cors": "^2.8.4",
     "ejs": "^2.6.1",
     "email-templates": "^4.0.1",
-    "express": "^4.13.3",
+    "express": "^4.17.3",
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.2.2",
     "lodash": "^4.17.15",
