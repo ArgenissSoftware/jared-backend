@@ -19,7 +19,7 @@
     "email-templates": "^4.0.1",
     "express": "^4.13.3",
     "express-jwt": "^5.3.1",
-    "jsonwebtoken": "^8.2.2",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.15",
     "mongoose": "^5.7.7",
     "nodemailer": "^4.6.5",
